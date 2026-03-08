@@ -6,7 +6,7 @@ using SimpleERP.Models;
 
 namespace SimpleERP.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class LogsController : BaseApiController
     {
         private readonly ApplicationDbContext _context;

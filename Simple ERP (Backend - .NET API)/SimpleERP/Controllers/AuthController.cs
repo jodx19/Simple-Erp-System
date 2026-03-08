@@ -95,8 +95,18 @@ namespace SimpleERP.Controllers
         public async Task<ActionResult<UserResponseDto>> Login(UserLoginDto request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
+            if (user == null)
+            {
+                Console.WriteLine($"Login failed: User with email {request.Email} not found");
                 return BadRequest("Wrong credentials.");
+            }
+            
+            var passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+            if (!passwordValid)
+            {
+                Console.WriteLine($"Login failed: Invalid password for user {request.Email}");
+                return BadRequest("Wrong credentials.");
+            }
 
             // Reject deactivated accounts
             if (user is ApplicationUser appUser && !appUser.IsActive)

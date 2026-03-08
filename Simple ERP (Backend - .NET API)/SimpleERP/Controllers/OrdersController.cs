@@ -7,7 +7,7 @@ using SimpleERP.Services;
 
 namespace SimpleERP.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Manager")]
     public class OrdersController : BaseApiController
     {
         private readonly OrderService _orderService;
