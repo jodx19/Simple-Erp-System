@@ -24,11 +24,11 @@ The system provides a modular architecture designed to handle **orders, customer
 
 ![Suppliers](screenshots/suppliers.png)
 
-## POS System
+## invetory System
 
 ![POS](screenshots/pos.png)
 
-## Inventory Management
+## team Management
 
 ![Inventory](screenshots/inventory.png)
 
