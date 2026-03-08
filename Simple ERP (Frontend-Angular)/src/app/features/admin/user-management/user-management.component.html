@@ -1,0 +1,277 @@
+<div class="team-management-container">
+  <div class="header-section">
+    <div class="title-meta">
+      <h1>Team Management</h1>
+      <p>Securely manage enterprise users, roles, and administrative permissions.</p>
+    </div>
+    <div class="header-actions">
+      <button mat-flat-button color="primary" class="invite-btn" (click)="inviteUser()">
+        <mat-icon>person_add</mat-icon>
+        Invite Team Member
+      </button>
+      <button mat-icon-button class="refresh-btn" (click)="loadUsers()" [disabled]="isLoading"
+        matTooltip="Sync directory">
+        <mat-icon [class.rotating]="isLoading">sync</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    <mat-card class="metric-card">
+      <div class="metric-icon total">
+        <mat-icon>groups</mat-icon>
+      </div>
+      <div class="metric-data">
+        <span class="label">Total Directory</span>
+        <span class="value">{{ metrics.total }}</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="metric-card">
+      <div class="metric-icon active">
+        <mat-icon>verified</mat-icon>
+      </div>
+      <div class="metric-data">
+        <span class="label">Active Access</span>
+        <span class="value">{{ metrics.active }}</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="metric-card">
+      <div class="metric-icon admin">
+        <mat-icon>admin_panel_settings</mat-icon>
+      </div>
+      <div class="metric-data">
+        <span class="label">Admins</span>
+        <span class="value">{{ metrics.admins }}</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="metric-card">
+      <div class="metric-icon pending">
+        <mat-icon>outgoing_mail</mat-icon>
+      </div>
+      <div class="metric-data">
+        <span class="label">Pending Invites</span>
+        <span class="value">{{ metrics.pending }}</span>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="management-surface glass-surface">
+    <div class="filter-toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Search users...</mat-label>
+        <input matInput (input)="onSearch($event)" placeholder="Name, email, or role">
+      </mat-form-field>
+
+      <div class="dropdown-filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Filter by Role</mat-label>
+          <mat-select [(value)]="roleFilter" (selectionChange)="onRoleChange($event.value)">
+            <mat-option value="All">All Roles</mat-option>
+            <mat-option value="Admin">Admin</mat-option>
+            <mat-option value="Manager">Manager</mat-option>
+            <mat-option value="Employee">Employee</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(value)]="statusFilter" (selectionChange)="onStatusChange($event.value)">
+            <mat-option value="All">All Status</mat-option>
+            <mat-option value="Active">Active</mat-option>
+            <mat-option value="Inactive">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    @if (isLoading) {
+    <div class="directory-loader">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Synchronizing Enterprise Directory...</span>
+    </div>
+    } @else {
+    <div class="table-container">
+      <table mat-table [dataSource]="filteredUsers">
+        <!-- User Info -->
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef> Team Member </th>
+          <td mat-cell *matCellDef="let user" (click)="viewUserDetails(user)" class="clickable-cell">
+            <div class="user-cell">
+              <div class="avatar" [style.background-color]="user.isActive ? '#6366f1' : '#334155'">
+                {{ user.fullName?.charAt(0) }}
+              </div>
+              <div class="info">
+                <span class="name">{{ user.fullName }}</span>
+                <span class="id">ID: 00{{ user.id }}</span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Email -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef> Professional Email </th>
+          <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
+        </ng-container>
+
+        <!-- Role -->
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef> Authority Level </th>
+          <td mat-cell *matCellDef="let user">
+            <span class="role-tag" [ngClass]="user.role?.toLowerCase()">
+              {{ user.role }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Permissions -->
+        <ng-container matColumnDef="permissions">
+          <th mat-header-cell *matHeaderCellDef> Access Scope </th>
+          <td mat-cell *matCellDef="let user">
+            <div class="permissions-tray">
+              <mat-icon matTooltip="Orders Access" [class.granted]="user.role !== 'Employee'">shopping_cart</mat-icon>
+              <mat-icon matTooltip="Inventory Access" [class.granted]="user.role !== 'Employee'">inventory_2</mat-icon>
+              <mat-icon matTooltip="Admin Privileges" [class.granted]="user.role === 'Admin'">security</mat-icon>
+              <mat-icon matTooltip="API Access" [class.granted]="user.role === 'Admin'">api</mat-icon>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Last Login -->
+        <ng-container matColumnDef="lastLogin">
+          <th mat-header-cell *matHeaderCellDef> Activity </th>
+          <td mat-cell *matCellDef="let user" class="text-muted">
+            {{ user.isActive ? '2h ago' : 'N/A' }}
+          </td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Directory Status </th>
+          <td mat-cell *matCellDef="let user">
+            <span class="status-indicator" [ngClass]="user.isActive ? 'active' : 'suspended'">
+              <div class="dot"></div>
+              {{ user.isActive ? 'Active' : 'Suspended' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let user">
+            <button mat-icon-button [matMenuTriggerFor]="userActions">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+            <mat-menu #userActions="matMenu" class="management-menu">
+              <button mat-menu-item (click)="viewUserDetails(user)">
+                <mat-icon>visibility</mat-icon>
+                <span>View Full Profile</span>
+              </button>
+              <button mat-menu-item (click)="toggleActive(user)">
+                <mat-icon [color]="user.isActive ? 'warn' : 'primary'">{{ user.isActive ? 'block' : 'power_settings_new'
+                  }}</mat-icon>
+                <span>{{ user.isActive ? 'Suspend Access' : 'Restore Access' }}</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item [matMenuTriggerFor]="rolesSub">
+                <mat-icon>badge</mat-icon>
+                <span>Modify Authority</span>
+              </button>
+            </mat-menu>
+            <mat-menu #rolesSub="matMenu">
+              <button mat-menu-item (click)="updateRole(user, 'Admin')">Make Admin</button>
+              <button mat-menu-item (click)="updateRole(user, 'Manager')">Make Manager</button>
+              <button mat-menu-item (click)="updateRole(user, 'Employee')">Make Employee</button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    }
+  </div>
+
+  <!-- User Details Drawer -->
+  <mat-drawer-container class="drawer-container" autosize>
+    <mat-drawer #drawer mode="over" position="end" class="user-drawer" [opened]="isDrawerOpen" (closed)="closeDrawer()">
+      @if (selectedUser) {
+      <div class="drawer-header">
+        <button mat-icon-button (click)="closeDrawer()" class="close-btn">
+          <mat-icon>close</mat-icon>
+        </button>
+        <div class="header-profile">
+          <div class="large-avatar">{{ selectedUser.fullName?.charAt(0) }}</div>
+          <h2>{{ selectedUser.fullName }}</h2>
+          <span class="role-label">{{ selectedUser.role }}</span>
+        </div>
+      </div>
+
+      <div class="drawer-content">
+        <div class="drawer-section">
+          <label>Security & Credentials</label>
+          <div class="info-row">
+            <mat-icon>email</mat-icon>
+            <span>{{ selectedUser.email }}</span>
+          </div>
+          <div class="info-row">
+            <mat-icon>vpn_key</mat-icon>
+            <span>Two-Factor Authentication: Enabled</span>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="drawer-section">
+          <label>Administrative Permissions</label>
+          <div class="permission-grid">
+            <mat-checkbox [checked]="selectedUser.role !== 'Employee'">Orders Management</mat-checkbox>
+            <mat-checkbox [checked]="selectedUser.role !== 'Employee'">Inventory Control</mat-checkbox>
+            <mat-checkbox [checked]="selectedUser.role === 'Admin'">Financial Core</mat-checkbox>
+            <mat-checkbox [checked]="selectedUser.role === 'Admin'">System Settings</mat-checkbox>
+            <mat-checkbox [checked]="true">Basic Reports</mat-checkbox>
+            <mat-checkbox [checked]="selectedUser.role !== 'Employee'">Customer CRM</mat-checkbox>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="drawer-section">
+          <label>Recent System Activity</label>
+          <div class="activity-trail">
+            <div class="activity-item">
+              <mat-icon>login</mat-icon>
+              <div class="text">
+                <span>Logged in from 192.168.1.1</span>
+                <em>2 hours ago</em>
+              </div>
+            </div>
+            <div class="activity-item">
+              <mat-icon>edit_note</mat-icon>
+              <div class="text">
+                <span>Modified product: Enterprise GPU 900</span>
+                <em>Yesterday at 4:30 PM</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button mat-stroked-button color="warn" class="suspend-btn" (click)="toggleActive(selectedUser)">
+          {{ selectedUser.isActive ? 'Suspend Individual' : 'Activate Access' }}
+        </button>
+        <button mat-flat-button color="primary" class="save-btn" (click)="closeDrawer()">
+          Save Changes
+        </button>
+      </div>
+      }
+    </mat-drawer>
+  </mat-drawer-container>
+</div>

@@ -1,0 +1,352 @@
+@import "../../../styles/shared-styles";
+
+// Glassmorphism 2.0 Variables & Mixins
+$glass-bg: rgba(15, 23, 42, 0.8);
+$glass-blur: blur(20px);
+$glass-border: 1px solid rgba(255, 255, 255, 0.1);
+$glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+@mixin glass-card-2 {
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  border: $glass-border;
+  border-radius: 20px;
+  box-shadow: $glass-shadow;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+// ── Header Section ──────────────────────────
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap; // Allow wrapping on small screens
+  gap: 16px;
+
+  .title-group {
+    h1 {
+      margin: 0;
+      font-size: clamp(1.75rem, 5vw, 2.5rem); // Fluid typography
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: $slate-400;
+      font-size: clamp(0.85rem, 2vw, 1rem);
+    }
+  }
+
+  .refresh-btn {
+    background: transparent !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(8px);
+    border-radius: 12px !important;
+    height: 44px !important;
+    padding: 0 1.25rem !important;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    mat-icon {
+      margin-right: 8px;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-color: rgba(255, 255, 255, 0.4) !important;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+// ── KPI Grid (Top Row) ──────────────────────
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.kpi-card {
+  min-width: 0; // Prevent flex/grid blowout
+  @include glass-card-2;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: $orange-500;
+    background: rgba(15, 23, 42, 0.9);
+  }
+
+  .icon-box {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  /* Variant Colors with 20% Opacity Background */
+  &.sales .icon-box {
+    background: rgba($success-color, 0.2);
+    color: $success-color;
+  }
+
+  &.inventory .icon-box {
+    background: rgba($info-color, 0.2);
+    color: $info-color;
+  }
+
+  &.orders .icon-box {
+    background: rgba($warning-color, 0.2);
+    color: $warning-color;
+  }
+
+  &.alerts .icon-box {
+    background: rgba($error-color, 0.2);
+    color: $error-color;
+  }
+
+  // Pulse animation for high stock alerts
+  &.pulse-critical {
+    animation: pulse-red 2s infinite ease-in-out;
+    border-color: rgba($error-color, 0.4);
+  }
+
+  .kpi-data {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: $slate-400;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .value {
+      @include currency-bold;
+      font-size: clamp(1.25rem, 3vw, 1.85rem);
+      color: $orange-500;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba($error-color, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba($error-color, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba($error-color, 0);
+  }
+}
+
+// ── Charts Grid (Middle Row) ────────────────
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  min-width: 0; // Prevent content expansion bugs relative to charts
+  display: flex;
+  flex-direction: column;
+  @include glass-card-2;
+  padding: 2rem;
+
+  @media (max-width: 600px) {
+    padding: 1.25rem;
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+
+    .title-group {
+      h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      p {
+        margin: 4px 0 0;
+        font-size: 0.85rem;
+        color: $slate-400;
+      }
+    }
+  }
+
+  .chart-container {
+    height: 320px;
+    min-height: 250px;
+    position: relative;
+    width: 100%;
+    flex: 1;
+  }
+}
+
+// ── Transactions Section (Bottom Row) ───────
+.transactions-section {
+  @include glass-card-2;
+  padding: 2rem;
+  margin-bottom: 2rem;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .explore-btn {
+      color: $orange-500 !important;
+      font-weight: 600;
+
+      &:hover {
+        background: rgba($orange-500, 0.05) !important;
+      }
+    }
+  }
+
+  .mat-mdc-table {
+    border-radius: 12px;
+    overflow: hidden;
+    background: transparent !important;
+
+    .mat-mdc-header-cell {
+      background: rgba(0, 0, 0, 0.2) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: $slate-400;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .mat-mdc-cell {
+      padding: 1.25rem 1.5rem;
+      color: #cbd5e1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+
+      .customer-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        span {
+          @include primary-name-bold;
+          color: #fff;
+        }
+
+        mat-icon {
+          color: $slate-400;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .amount-cell {
+        @include currency-bold;
+        color: #fff;
+      }
+    }
+
+    .mat-mdc-row {
+      @include interactive-row;
+    }
+  }
+}
+
+// ── Feedback States ─────────────────────────
+.loader-overlay,
+.error-card {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  @include glass-card-2;
+}
+
+.error-card {
+  text-align: center;
+  padding: 3rem;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: $error-color;
+    opacity: 0.5;
+  }
+
+  h3 {
+    color: #fff;
+    margin: 1rem 0 0.5rem;
+  }
+
+  p {
+    color: $slate-400;
+    max-width: 400px;
+  }
+}

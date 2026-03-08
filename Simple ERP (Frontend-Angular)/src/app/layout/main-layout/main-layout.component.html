@@ -1,0 +1,128 @@
+@if (isLoading$ | async) {
+<mat-progress-bar mode="indeterminate" class="global-loader"></mat-progress-bar>
+}
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <mat-toolbar class="sidenav-toolbar">
+      <div class="logo-container">
+        <mat-icon class="logo-icon">account_balance</mat-icon>
+        <span class="logo-text">Simple ERP</span>
+      </div>
+    </mat-toolbar>
+
+    <mat-nav-list class="nav-links">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" class="clr-dashboard"
+        [routerLinkActiveOptions]="{ exact: true }" (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+
+      <a mat-list-item routerLink="/orders" routerLinkActive="active-link" class="clr-orders"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>shopping_cart</mat-icon>
+        <span matListItemTitle>Orders</span>
+      </a>
+
+      <a mat-list-item routerLink="/customers" routerLinkActive="active-link" class="clr-crm"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>groups</mat-icon>
+        <span matListItemTitle>Customers (CRM)</span>
+      </a>
+
+      <a mat-list-item routerLink="/suppliers" routerLinkActive="active-link" class="clr-srm"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>local_shipping</mat-icon>
+        <span matListItemTitle>Suppliers (SRM)</span>
+      </a>
+
+      <a mat-list-item routerLink="/pos" routerLinkActive="active-link" class="clr-pos"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>point_of_sale</mat-icon>
+        <span matListItemTitle>POS</span>
+      </a>
+
+      @if (isAdmin || isManager) {
+      <a mat-list-item routerLink="/products" routerLinkActive="active-link" class="clr-inventory"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>Inventory</span>
+      </a>
+      }
+
+      @if (isAdmin) {
+      <a mat-list-item routerLink="/logs" routerLinkActive="active-link" class="clr-logs"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>history</mat-icon>
+        <span matListItemTitle>Activity Trail</span>
+      </a>
+
+      <a mat-list-item routerLink="/settings" routerLinkActive="active-link" class="clr-settings"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>settings</mat-icon>
+        <span matListItemTitle>Settings</span>
+      </a>
+
+      <a mat-list-item routerLink="/users" routerLinkActive="active-link" class="clr-users"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>people_alt</mat-icon>
+        <span matListItemTitle>Team Management</span>
+      </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="main-toolbar">
+      @if (isHandset$ | async) {
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      }
+
+      @if (company$ | async; as company) {
+      <span class="company-name">{{ company.companyName }}</span>
+      } @else {
+      <span class="company-name">Simple ERP</span>
+      }
+
+      <span class="spacer"></span>
+
+      <div class="toolbar-actions">
+        @if (!(isHandset$ | async)) {
+        <div class="user-meta">
+          <span class="username">{{ user?.username }}</span>
+          <span class="user-role">{{ user?.role }}</span>
+        </div>
+        }
+        <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-button">
+          <div class="avatar">{{ user?.username?.charAt(0) || 'U' }}</div>
+          <mat-icon class="dropdown-icon">expand_more</mat-icon>
+        </button>
+      </div>
+
+      <mat-menu #profileMenu="matMenu" xPosition="before" class="profile-menu">
+        <div class="menu-header" (click)="$event.stopPropagation()">
+          <p class="role-text">{{ user?.role }}</p>
+          <p class="email-text">{{ user?.email }}</p>
+        </div>
+        <mat-divider></mat-divider>
+        @if (isAdmin) {
+        <button mat-menu-item routerLink="/settings">
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+        </button>
+        }
+        <button mat-menu-item (click)="logout()">
+          <mat-icon color="warn">logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

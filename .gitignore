@@ -1,0 +1,22 @@
+# Angular
+node_modules/
+.angular/
+dist/
+coverage/
+
+# ASP.NET Core
+bin/
+obj/
+.vs/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+src/environments/environment*.ts
+
+# OS
+.DS_Store
+Thumbs.db

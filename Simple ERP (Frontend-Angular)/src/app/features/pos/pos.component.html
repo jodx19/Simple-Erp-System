@@ -1,0 +1,132 @@
+<div class="pos-container">
+    <!-- Product Section -->
+    <div class="products-section">
+        <div class="search-bar">
+            <mat-form-field appearance="outline">
+                <mat-icon matPrefix>search</mat-icon>
+                <mat-label>Search Items (Name or SKU)</mat-label>
+                <input matInput [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
+                    placeholder="Scan barcode or type...">
+            </mat-form-field>
+        </div>
+
+        @if (isLoading()) {
+        <div class="loader">
+            <mat-spinner diameter="40"></mat-spinner>
+            <span>Loading Inventory...</span>
+        </div>
+        } @else {
+        <div class="product-grid">
+            @for (product of filteredProducts(); track product.id) {
+            <mat-card class="product-card" [class.out-of-stock]="(product.stockQuantity ?? 0) <= 0"
+                (click)="addToCart(product)">
+                <div class="stock-badge" [class.low]="(product.stockQuantity ?? 0) < 5">
+                    {{ product.stockQuantity }} in stock
+                </div>
+                <mat-card-content>
+                    <div class="product-name">{{ product.name }}</div>
+                    <div class="product-sku">{{ product.sku || 'N/A' }}</div>
+                    <div class="product-price">{{ product.price | currency }}</div>
+                </mat-card-content>
+                <div class="add-overlay">
+                    <mat-icon>add_shopping_cart</mat-icon>
+                </div>
+            </mat-card>
+            } @empty {
+            <div class="no-results">
+                <mat-icon>inventory_2</mat-icon>
+                <p>No products found matching "{{ searchQuery() }}"</p>
+            </div>
+            }
+        </div>
+        }
+    </div>
+
+    <!-- Cart Section -->
+    <div class="cart-section">
+        <mat-card class="cart-card">
+            <mat-card-header>
+                <mat-card-title>Current Basket</mat-card-title>
+                <mat-card-subtitle>{{ cartCount() }} items selected</mat-card-subtitle>
+                <span class="spacer"></span>
+                <button mat-icon-button color="warn" (click)="clearCart()" matTooltip="Clear Basket">
+                    <mat-icon>delete_sweep</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-divider></mat-divider>
+
+            <div class="cart-items">
+                @for (item of cart(); track item.product.id) {
+                <div class="cart-item">
+                    <div class="item-info">
+                        <span class="name">{{ item.product.name }}</span>
+                        <span class="price-unit">{{ item.product.price | currency }} / unit</span>
+                    </div>
+                    <div class="qty-controls">
+                        <button mat-icon-button (click)="updateQuantity(item.product.id!, -1)">
+                            <mat-icon>remove_circle_outline</mat-icon>
+                        </button>
+                        <span class="qty">{{ item.quantity }}</span>
+                        <button mat-icon-button (click)="updateQuantity(item.product.id!, 1)">
+                            <mat-icon>add_circle_outline</mat-icon>
+                        </button>
+                    </div>
+                    <div class="item-total">
+                        {{ (item.product.price ?? 0) * item.quantity | currency }}
+                    </div>
+                </div>
+                } @empty {
+                <div class="empty-cart">
+                    <mat-icon>shopping_basket</mat-icon>
+                    <p>Your basket is empty</p>
+                    <span>Scan or click products to add them</span>
+                </div>
+                }
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="cart-footer">
+                <div class="summary-links">
+                    <div class="total-row">
+                        <span>Subtotal</span>
+                        <span>{{ cartTotal() | currency }}</span>
+                    </div>
+                    <div class="total-row grand">
+                        <span>Total</span>
+                        <span>{{ cartTotal() | currency }}</span>
+                    </div>
+                </div>
+
+                <div class="checkout-options">
+                  <mat-form-field appearance="outline" class="payment-select">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select [ngModel]="paymentMethod()" (ngModelChange)="paymentMethod.set($event)">
+                      <mat-option [value]="0">Cash</mat-option>
+                      <mat-option [value]="1">Credit Card</mat-option>
+                      <mat-option [value]="2">Bank Transfer</mat-option>
+                      <mat-option [value]="3">Other</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="notes-field">
+                    <mat-label>Order Notes</mat-label>
+                    <textarea matInput [ngModel]="orderNotes()" (ngModelChange)="orderNotes.set($event)" 
+                              placeholder="Any special instructions..."></textarea>
+                  </mat-form-field>
+                </div>
+
+                <button mat-flat-button class="checkout-btn" [disabled]="cart().length === 0 || isCheckingOut()"
+                    (click)="checkout()">
+                    @if (isCheckingOut()) {
+                    <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
+                    } @else {
+                    <mat-icon>point_of_sale</mat-icon>
+                    Complete Purchase
+                    }
+                </button>
+            </div>
+        </mat-card>
+    </div>
+</div>

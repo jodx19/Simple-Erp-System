@@ -1,0 +1,267 @@
+<div class="settings-container">
+  <div class="settings-header">
+    <h1>Enterprise Configuration</h1>
+    <p>Manage your organization's core parameters and visual identity.</p>
+  </div>
+
+  @if (isLoading) {
+  <div class="loader-overlay">
+    <mat-spinner diameter="44"></mat-spinner>
+    <span>Synchronizing configuration...</span>
+  </div>
+  } @else {
+  <form [formGroup]="settingsForm" (ngSubmit)="onSave()" class="settings-card">
+    <mat-tab-group animationDuration="200ms">
+      <!-- General Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon style="margin-right: 8px;">settings</mat-icon>
+          General
+        </ng-template>
+        <div class="tab-content">
+          <div class="section-group">
+            <div class="section-title">
+              <mat-icon>business</mat-icon>
+              Company Identity
+            </div>
+            <div class="form-grid">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Company Name</mat-label>
+                <input matInput formControlName="companyName" placeholder="Enter company name">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Primary Address</mat-label>
+                <textarea matInput formControlName="address" placeholder="Organization headquarters" rows="2"></textarea>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Primary Currency</mat-label>
+                <mat-select formControlName="currency">
+                  <mat-option value="USD">USD - US Dollar</mat-option>
+                  <mat-option value="EUR">EUR - Euro</mat-option>
+                  <mat-option value="GBP">GBP - British Pound</mat-option>
+                  <mat-option value="EGP">EGP - Egyptian Pound</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Time Zone</mat-label>
+                <mat-select formControlName="timeZone">
+                  <mat-option value="UTC+2 (Cairo)">Cairo (UTC+2)</mat-option>
+                  <mat-option value="UTC+0 (London)">London (UTC+0)</mat-option>
+                  <mat-option value="UTC-5 (New York)">New York (UTC-5)</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Branding Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon style="margin-right: 8px;">palette</mat-icon>
+          Branding
+        </ng-template>
+        <div class="tab-content">
+          <div class="section-group">
+            <div class="section-title">
+              <mat-icon>brush</mat-icon>
+              Visual Identity
+            </div>
+            <div class="form-grid">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Logo Resource URL</mat-label>
+                <input matInput formControlName="logoUrl" placeholder="https://example.com/logo.png">
+              </mat-form-field>
+
+              <div class="color-picker-group">
+                <mat-label>Primary Brand Color</mat-label>
+                <div class="picker-container">
+                  <input type="color" formControlName="primaryColor">
+                  <code>{{ settingsForm.get('primaryColor')?.value }}</code>
+                </div>
+              </div>
+
+              <mat-form-field appearance="outline">
+                <mat-label>System Theme</mat-label>
+                <mat-select formControlName="theme">
+                  <mat-option value="Dark">Enterprise Dark</mat-option>
+                  <mat-option value="Light">Classic Light</mat-option>
+                  <mat-option value="System">System Default</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Localization Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon style="margin-right: 8px;">language</mat-icon>
+          Localization
+        </ng-template>
+        <div class="tab-content">
+          <div class="section-group">
+            <div class="section-title">
+              <mat-icon>public</mat-icon>
+              Regional Parameters
+            </div>
+            <div class="form-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>Default Language</mat-label>
+                <mat-select formControlName="language">
+                  <mat-option value="English">English (US)</mat-option>
+                  <mat-option value="Arabic">Arabic (العربية)</mat-option>
+                  <mat-option value="German">German (Deutsch)</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Date Format</mat-label>
+                <mat-select formControlName="dateFormat">
+                  <mat-option value="DD/MM/YYYY">DD/MM/YYYY</mat-option>
+                  <mat-option value="MM/DD/YYYY">MM/DD/YYYY</mat-option>
+                  <mat-option value="YYYY-MM-DD">YYYY-MM-DD</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Number Format</mat-label>
+                <mat-select formControlName="numberFormat">
+                  <mat-option value="1,234.56">1,234.56</mat-option>
+                  <mat-option value="1.234,56">1.234,56</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Security Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon style="margin-right: 8px;">security</mat-icon>
+          Security
+        </ng-template>
+        <div class="tab-content">
+          <div class="section-group">
+            <div class="section-title">
+              <mat-icon>shield</mat-icon>
+              Access & Safety
+            </div>
+            <div class="form-grid">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Password Policy</mat-label>
+                <mat-select formControlName="passwordPolicy">
+                  <mat-option value="Basic">Basic (8+ chars)</mat-option>
+                  <mat-option value="Strong">Strong (Mixed case + symbols)</mat-option>
+                  <mat-option value="Enterprise">Enterprise (Rotational + MFA)</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Session Timeout (Minutes)</mat-label>
+                <input matInput type="number" formControlName="sessionTimeout">
+              </mat-form-field>
+
+              <div class="toggle-group">
+                <mat-slide-toggle formControlName="twoFactAuth">Require Two-Factor Auth (2FA)</mat-slide-toggle>
+                <mat-slide-toggle formControlName="loginAlerts">New Login Email Alerts</mat-slide-toggle>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>IP Restrictions (Whitelist)</mat-label>
+                <textarea matInput formControlName="ipRestrictions" placeholder="Enter IP ranges, one per line" rows="2"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Notifications Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon style="margin-right: 8px;">notifications</mat-icon>
+          Notifications
+        </ng-template>
+        <div class="tab-content">
+          <div class="section-group">
+            <div class="section-title">
+              <mat-icon>hub</mat-icon>
+              Alert Subscriptions
+            </div>
+            <div class="notification-list">
+              <div class="notif-item">
+                <div class="notif-info">
+                  <strong>Order Alerts</strong>
+                  <span>Receive notification for each new order placement</span>
+                </div>
+                <mat-slide-toggle formControlName="orderAlerts"></mat-slide-toggle>
+              </div>
+              <div class="notif-item">
+                <div class="notif-info">
+                  <strong>Inventory Alerts</strong>
+                  <span>Alert when stock levels fall below thresholds</span>
+                </div>
+                <mat-slide-toggle formControlName="inventoryAlerts"></mat-slide-toggle>
+              </div>
+              <div class="notif-item">
+                <div class="notif-info">
+                  <strong>Email Notifications</strong>
+                  <span>Global toggle for all outbound system emails</span>
+                </div>
+                <mat-slide-toggle formControlName="emailNotifications"></mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Integrations Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon style="margin-right: 8px;">terminal</mat-icon>
+          Integrations
+        </ng-template>
+        <div class="tab-content">
+          <div class="section-group">
+            <div class="section-title">
+              <mat-icon>api</mat-icon>
+              External Connectivity
+            </div>
+            <div class="form-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>SMTP Host</mat-label>
+                <input matInput formControlName="smtpHost">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>SMTP Port</mat-label>
+                <input matInput type="number" formControlName="smtpPort">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Payment Gateway API Key</mat-label>
+                <input matInput type="password" formControlName="paymentGatewayApiKey">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Active Webhook URL</mat-label>
+                <input matInput formControlName="webhookUrl">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div class="form-actions">
+      <button mat-flat-button type="submit" class="btn-save" [disabled]="saving || settingsForm.invalid">
+        <mat-icon *ngIf="!saving">cloud_sync</mat-icon>
+        <mat-spinner diameter="24" *ngIf="saving"></mat-spinner>
+        {{ saving ? 'Synchronizing...' : 'Sync Enterprise Config' }}
+      </button>
+    </div>
+  </form>
+  }
+</div>

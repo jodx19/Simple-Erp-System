@@ -1,0 +1,246 @@
+<div class="crm-container">
+  <!-- 1. Header -->
+  <div class="page-header">
+    <div>
+      <h1>Customer Relationship (CRM)</h1>
+      <p class="text-muted">Manage customer accounts, balances, loyalty, and engagement</p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button>
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+      <button mat-stroked-button>
+        <mat-icon>download</mat-icon>
+        Export
+      </button>
+      <button mat-flat-button color="primary">
+        <mat-icon>person_add</mat-icon>
+        Register Customer
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. KPI Metrics -->
+  <div class="crm-kpi-grid">
+    <mat-card class="kpi-card glass-card">
+      <div class="kpi-icon-wrapper active">
+        <mat-icon>group</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h4 class="kpi-title">Active Customers</h4>
+        <div class="kpi-value">{{ activeCustomers | number }}<span class="kpi-sub"> / {{ totalCustomers | number
+            }}</span></div>
+        <div class="kpi-trend positive"><mat-icon>trending_up</mat-icon> {{ newCustomersThisMonth }} new this month
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="kpi-card glass-card">
+      <div class="kpi-icon-wrapper revenue">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h4 class="kpi-title">Outstanding Balance</h4>
+        <div class="kpi-value">{{ outstandingBalance | currency }}</div>
+        <div class="kpi-trend warning"><mat-icon>warning</mat-icon> {{ atRiskCustomersCount }} accounts at risk</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="kpi-card glass-card">
+      <div class="kpi-icon-wrapper tier">
+        <mat-icon>stars</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h4 class="kpi-title">VIP Customers</h4>
+        <div class="kpi-value">{{ vipCustomersCount | number }}</div>
+        <div class="kpi-trend neutral"><mat-icon>star_border</mat-icon> High tier loyalty</div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- 3. CRM Insight Charts -->
+  <div class="crm-charts-grid">
+    <mat-card class="chart-card glass-card">
+      <div class="chart-header">
+        <h3>Customer Growth</h3>
+        <p>New registrations over the last 7 days</p>
+      </div>
+      <div class="chart-container line-chart">
+        <canvas baseChart [data]="growthChartData" [options]="growthChartOptions" [type]="'line'"></canvas>
+      </div>
+    </mat-card>
+
+    <mat-card class="chart-card glass-card">
+      <div class="chart-header">
+        <h3>Balances by Segment</h3>
+        <p>Outstanding totals mapped to customer type</p>
+      </div>
+      <div class="chart-container bar-chart">
+        <canvas baseChart [data]="balanceChartData" [options]="balanceChartOptions" [type]="'bar'"></canvas>
+      </div>
+    </mat-card>
+
+    <mat-card class="chart-card glass-card">
+      <div class="chart-header">
+        <h3>Payment Distribution</h3>
+        <p>Volume of preferred payment methods</p>
+      </div>
+      <div class="chart-container doughnut-chart">
+        <canvas baseChart [data]="paymentChartData" [options]="paymentChartOptions" [type]="'doughnut'"></canvas>
+      </div>
+    </mat-card>
+
+    <mat-card class="chart-card glass-card">
+      <div class="chart-header">
+        <h3>Loyalty Tiers</h3>
+        <p>Customer distribution across reward levels</p>
+      </div>
+      <div class="chart-container bar-chart">
+        <canvas baseChart [data]="loyaltyChartData" [options]="loyaltyChartOptions" [type]="'bar'"></canvas>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- 4. Filters Toolbar -->
+  <div class="filters-toolbar glass-card">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search customers...</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Name, Email, Phone, ID">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Customer Status</mat-label>
+      <mat-select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+        <mat-option value="all">All Statuses</mat-option>
+        <mat-option value="active">Active</mat-option>
+        <mat-option value="inactive">Inactive</mat-option>
+        <mat-option value="overdue">Overdue</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Loyalty Tier</mat-label>
+      <mat-select [(ngModel)]="tierFilter" (ngModelChange)="applyFilters()">
+        <mat-option value="all">All Tiers</mat-option>
+        <mat-option value="bronze">Bronze</mat-option>
+        <mat-option value="silver">Silver</mat-option>
+        <mat-option value="gold">Gold</mat-option>
+        <mat-option value="vip">VIP</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- 5. Customers Table & Drawer -->
+  <mat-drawer-container class="crm-drawer-container" autosize>
+    <mat-drawer-content>
+      <div class="table-container glass-card">
+        @if (isLoading) {
+        <div class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Retrieving client database...</p>
+        </div>
+        } @else {
+        <div class="table-scroll-container">
+          <table mat-table [dataSource]="filteredCustomers" class="crm-table">
+
+            <ng-container matColumnDef="customer">
+              <th mat-header-cell *matHeaderCellDef> Customer </th>
+              <td mat-cell *matCellDef="let c" class="customer-cell">
+                <div class="avatar-circle">{{ getInitials(c.name) }}</div>
+                <div class="customer-info">
+                  <span class="name">{{ c.name }}</span>
+                  <span class="id">#CUS-{{ (c.id || 0) | number:'3.0' }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="contact">
+              <th mat-header-cell *matHeaderCellDef> Contact </th>
+              <td mat-cell *matCellDef="let c" class="contact-cell">
+                <span class="email"><mat-icon>email</mat-icon> {{ c.email }}</span>
+                <span class="phone"><mat-icon>phone</mat-icon> {{ c.phone || 'N/A' }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="segment">
+              <th mat-header-cell *matHeaderCellDef> Segment </th>
+              <td mat-cell *matCellDef="let c">
+                <span class="segment-text">{{ getMockSegment(c) }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="loyalty">
+              <th mat-header-cell *matHeaderCellDef> Loyalty </th>
+              <td mat-cell *matCellDef="let c">
+                <span class="loyalty-badge" [ngClass]="getLoyaltyTier(c.loyaltyPoints).class">
+                  {{ getLoyaltyTier(c.loyaltyPoints).label }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="financials">
+              <th mat-header-cell *matHeaderCellDef> Financials </th>
+              <td mat-cell *matCellDef="let c" class="financial-cell">
+                @if (c.balance > 0) {
+                <div class="balance negative">Owes {{ c.balance | currency }}</div>
+                } @else {
+                <div class="balance positive">Clear</div>
+                }
+                <div class="spent">Spent $2,500</div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef> Status </th>
+              <td mat-cell *matCellDef="let c">
+                <div class="status-pill-container">
+                  <span class="status-pill" [ngClass]="getMockStatus(c).class">
+                    {{ getMockStatus(c).label }}
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let c" class="actions-cell">
+                <div class="action-circles">
+                  <button mat-icon-button class="circle-btn view" matTooltip="View Profile" (click)="drawer.toggle()">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button mat-icon-button class="circle-btn edit" matTooltip="Edit Customer">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button class="circle-btn create" matTooltip="Create Order">
+                    <mat-icon>shopping_cart</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="crm-row"></tr>
+          </table>
+        </div>
+        }
+      </div>
+    </mat-drawer-content>
+
+    <mat-drawer #drawer position="end" mode="over" class="side-drawer">
+      <div class="drawer-content">
+        <div class="drawer-header">
+          <h3>Customer Profile</h3>
+          <button mat-icon-button (click)="drawer.close()"><mat-icon>close</mat-icon></button>
+        </div>
+
+        <mat-card class="summary-card">
+          <h4>Selected Profile</h4>
+          <div class="balance-total">$1200 Outstanding</div>
+        </mat-card>
+
+      </div>
+    </mat-drawer>
+  </mat-drawer-container>
+</div>

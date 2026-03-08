@@ -1,0 +1,343 @@
+<div class="srm-dashboard standard-padding">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-text">
+      <h1 class="page-title">Suppliers (SRM)</h1>
+      <p class="subtitle">Manage supplier relationships, delivery performance, and procurement efficiency</p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button color="primary">
+        <mat-icon>refresh</mat-icon> Refresh
+      </button>
+      <button mat-stroked-button color="primary">
+        <mat-icon>download</mat-icon> Export
+      </button>
+      <button mat-flat-button color="primary">
+        <mat-icon>add_business</mat-icon> Add Supplier
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Metrics Grid -->
+  <div class="srm-kpi-grid">
+    <div class="glass-card kpi-card">
+      <div class="kpi-icon"><mat-icon>domain</mat-icon></div>
+      <div class="kpi-data">
+        <div class="kpi-label">Total Suppliers</div>
+        <div class="kpi-value">{{ totalSuppliers }}</div>
+      </div>
+    </div>
+    <div class="glass-card kpi-card">
+      <div class="kpi-icon active-icon"><mat-icon>check_circle</mat-icon></div>
+      <div class="kpi-data">
+        <div class="kpi-label">Active Suppliers</div>
+        <div class="kpi-value">{{ activeSuppliers }} <span class="trend positive">Active</span></div>
+      </div>
+    </div>
+    <div class="glass-card kpi-card">
+      <div class="kpi-icon pending-icon"><mat-icon>pending_actions</mat-icon></div>
+      <div class="kpi-data">
+        <div class="kpi-label">Pending Deliveries</div>
+        <div class="kpi-value">{{ pendingDeliveries }} <span class="trend warn">Shipments</span></div>
+      </div>
+    </div>
+    <div class="glass-card kpi-card">
+      <div class="kpi-icon time-icon"><mat-icon>schedule</mat-icon></div>
+      <div class="kpi-data">
+        <div class="kpi-label">Avg Lead Time</div>
+        <div class="kpi-value">{{ averageLeadTime }} <span class="trend neutral">Days</span></div>
+      </div>
+    </div>
+    <div class="glass-card kpi-card">
+      <div class="kpi-icon star-icon"><mat-icon>stars</mat-icon></div>
+      <div class="kpi-data">
+        <div class="kpi-label">Top Performer</div>
+        <div class="kpi-value text-ellipsis" [matTooltip]="topSupplierName">{{ topSupplierName }}</div>
+      </div>
+    </div>
+    <div class="glass-card kpi-card">
+      <div class="kpi-icon alert-icon"><mat-icon>warning</mat-icon></div>
+      <div class="kpi-data">
+        <div class="kpi-label">Attention Needed</div>
+        <div class="kpi-value">{{ attentionRequired }} <span class="trend negative">Delayed</span></div>
+      </div>
+    </div>
+    <div class="glass-card kpi-card">
+      <div class="kpi-icon order-icon"><mat-icon>shopping_cart_checkout</mat-icon></div>
+      <div class="kpi-data">
+        <div class="kpi-label">Open POs</div>
+        <div class="kpi-value">{{ openPurchaseOrders }} <span class="trend neutral">Orders</span></div>
+      </div>
+    </div>
+    <div class="glass-card kpi-card">
+      <div class="kpi-icon category-icon"><mat-icon>category</mat-icon></div>
+      <div class="kpi-data">
+        <div class="kpi-label">Categories Covered</div>
+        <div class="kpi-value">{{ categoriesCovered }} <span class="trend neutral">Active</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Grid -->
+  <div class="srm-charts-grid">
+    <div class="glass-card chart-card">
+      <div class="chart-header">
+        <h3>Performance Trend</h3>
+        <span class="chart-subtitle">On-time delivery % (6 weeks)</span>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart [data]="performanceChartData" [options]="performanceChartOptions" [type]="'line'"></canvas>
+      </div>
+    </div>
+
+    <div class="glass-card chart-card">
+      <div class="chart-header">
+        <h3>Category Distribution</h3>
+        <span class="chart-subtitle">Suppliers by specialization</span>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart [data]="categoryChartData" [options]="categoryChartOptions" [type]="'doughnut'"></canvas>
+      </div>
+    </div>
+
+    <div class="glass-card chart-card">
+      <div class="chart-header">
+        <h3>Avg Lead Time by Category</h3>
+        <span class="chart-subtitle">Delivery speed analysis</span>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart [data]="leadTimeChartData" [options]="leadTimeChartOptions" [type]="'bar'"></canvas>
+      </div>
+    </div>
+
+    <div class="glass-card chart-card">
+      <div class="chart-header">
+        <h3>Status Breakdown</h3>
+        <span class="chart-subtitle">Supplier operational health</span>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart [data]="statusChartData" [options]="statusChartOptions" [type]="'doughnut'"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Toolbar -->
+  <div class="filters-toolbar glass-card">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label>Search Suppliers</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="ID, Name, Contact...">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Specialization</mat-label>
+      <mat-select [(ngModel)]="categoryFilter" (ngModelChange)="applyFilters()">
+        <mat-option value="All">All Categories</mat-option>
+        <mat-option value="Electronics">Electronics</mat-option>
+        <mat-option value="Furniture">Furniture</mat-option>
+        <mat-option value="Clothing">Clothing</mat-option>
+        <mat-option value="Food">Food & Grocery</mat-option>
+        <mat-option value="General">General</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+        <mat-option value="All">All Statuses</mat-option>
+        <mat-option value="active">Active</mat-option>
+        <mat-option value="delayed">Delayed</mat-option>
+        <mat-option value="high risk">High Risk</mat-option>
+        <mat-option value="inactive">Inactive</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Main Drawer Container -->
+  <mat-drawer-container class="srm-drawer-container" autosize>
+    <!-- Side Drawer -->
+    <mat-drawer #drawer position="end" mode="over" class="side-drawer">
+      @if (selectedSupplier) {
+      <div class="drawer-header">
+        <div class="drawer-title-area">
+          <div class="supplier-avatar large">{{ getInitials(selectedSupplier.name) }}</div>
+          <div class="title-details">
+            <h2>{{ selectedSupplier.name }}</h2>
+            <span class="category-badge" [ngClass]="getCategoryColorClass(selectedSupplier.supplyCategory)">
+              {{ selectedSupplier.supplyCategory || 'General' }}
+            </span>
+          </div>
+        </div>
+        <button mat-icon-button (click)="drawer.toggle()"><mat-icon>close</mat-icon></button>
+      </div>
+
+      <div class="drawer-content-scroll">
+        <div class="drawer-section">
+          <h3>Contact Information</h3>
+          <div class="detail-row"><mat-icon>person</mat-icon> {{ selectedSupplier.contactPerson }}</div>
+          <div class="detail-row"><mat-icon>email</mat-icon> {{ selectedSupplier.email || 'N/A' }}</div>
+          <div class="detail-row"><mat-icon>call</mat-icon> {{ selectedSupplier.phoneNumber || 'N/A' }}</div>
+          <div class="detail-row"><mat-icon>location_on</mat-icon> {{ selectedSupplier.address || 'N/A' }}</div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="drawer-section">
+          <h3>Financial Overview</h3>
+          <div class="finance-grid">
+            <div class="finance-card">
+              <span class="f-label">Outstanding Debts</span>
+              <span class="f-value text-red">{{ selectedSupplier.outstandingDebts | currency }}</span>
+            </div>
+            <div class="finance-card">
+              <span class="f-label">Total Paid</span>
+              <span class="f-value text-green">{{ selectedSupplier.totalPaid | currency }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="drawer-section">
+          <h3>Performance Specs</h3>
+          <div class="spec-grid">
+            <div class="spec-item">
+              <span class="s-label">Avg Lead Time</span>
+              <span class="s-val">{{ selectedSupplier.leadTimeDays || '-' }} Days</span>
+            </div>
+            <div class="spec-item">
+              <span class="s-label">Overall Rating</span>
+              <span class="s-val">{{ selectedSupplier.rating || '-' }}/5.0</span>
+            </div>
+            <div class="spec-item">
+              <span class="s-label">Last Order</span>
+              <span class="s-val">{{ selectedSupplier.lastOrderDate ? (selectedSupplier.lastOrderDate | date) : 'Never'
+                }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="s-label">Linked Items</span>
+              <span class="s-val">{{ selectedSupplier.products?.length || '0' }} Products</span>
+            </div>
+          </div>
+        </div>
+
+        @if (selectedSupplier.products && selectedSupplier.products.length > 0) {
+        <mat-divider></mat-divider>
+        <div class="drawer-section">
+          <h3>Linked Products</h3>
+          <div class="products-list">
+            @for (prod of selectedSupplier.products; track prod.id) {
+            <div class="product-item">
+              <div class="p-info">
+                <span class="p-name">{{ prod.name }}</span>
+                <span class="p-sku">{{ prod.sku }}</span>
+              </div>
+              <span class="p-price">{{ prod.price | currency }}</span>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </mat-drawer>
+    <mat-drawer-content>
+      <div class="glass-card table-wrapper">
+        @if (isLoading) {
+        <div class="loading-state">
+          <mat-spinner diameter="40" color="primary"></mat-spinner>
+          <span>Loading supplier network...</span>
+        </div>
+        } @else {
+        <div class="table-scroll">
+          <table mat-table [dataSource]="filteredSuppliers" class="srm-table">
+
+            <!-- Supplier Column -->
+            <ng-container matColumnDef="supplier">
+              <th mat-header-cell *matHeaderCellDef> Supplier </th>
+              <td mat-cell *matCellDef="let s">
+                <div class="supplier-cell" (click)="openProfile(s, drawer)">
+                  <div class="supplier-avatar">{{ getInitials(s.name) }}</div>
+                  <div class="supplier-info">
+                    <span class="s-name">{{ s.name }}</span>
+                    <span class="s-id">#SUP-00{{ s.id }}</span>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Contact Column -->
+            <ng-container matColumnDef="contact">
+              <th mat-header-cell *matHeaderCellDef> Contact </th>
+              <td mat-cell *matCellDef="let s">
+                <div class="contact-cell">
+                  <span class="c-name">{{ s.contactPerson || 'Unknown' }}</span>
+                  <span class="c-email">{{ s.email || 'No Email' }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Category Column -->
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef> Specialization </th>
+              <td mat-cell *matCellDef="let s">
+                <span class="category-badge" [ngClass]="getCategoryColorClass(s.supplyCategory)">
+                  {{ s.supplyCategory || 'General' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Metrics Column -->
+            <ng-container matColumnDef="metrics">
+              <th mat-header-cell *matHeaderCellDef> Performance & Lead Time </th>
+              <td mat-cell *matCellDef="let s">
+                <div class="metrics-cell">
+                  <div class="m-lead-time">
+                    <mat-icon>schedule</mat-icon>
+                    <span [class.text-warn]="s.leadTimeDays > 5">{{ s.leadTimeDays || '-' }} Days</span>
+                  </div>
+                  <div class="m-performance" [style.color]="getPerformanceIndicator(s).color">
+                    {{ getPerformanceIndicator(s).label }}
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef> Status </th>
+              <td mat-cell *matCellDef="let s">
+                <div class="status-pill {{ getMockStatus(s).class }}">
+                  {{ getMockStatus(s).val }}
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef class="actions-col"> Actions </th>
+              <td mat-cell *matCellDef="let s" class="actions-col">
+                <div class="action-buttons">
+                  <button mat-icon-button class="circle-btn view" matTooltip="View Profile"
+                    (click)="openProfile(s, drawer)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button mat-icon-button class="circle-btn order" matTooltip="Place Order" (click)="placeOrder(s)">
+                    <mat-icon>shopping_cart</mat-icon>
+                  </button>
+                  <button mat-icon-button class="circle-btn edit" matTooltip="Edit Supplier">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="interactive-row"></tr>
+          </table>
+        </div>
+        }
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

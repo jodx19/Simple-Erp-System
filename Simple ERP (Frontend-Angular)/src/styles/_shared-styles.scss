@@ -1,0 +1,154 @@
+/* =========================================================================
+   Global Shared Styles (Slate/Orange Glassmorphism)
+   ========================================================================= */
+
+// Define color variables centrally
+$white: #ffffff;
+$slate-900: #0f172a;
+$slate-800: #1e293b;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-500: #64748b;
+$slate-400: #94a3b8;
+$slate-300: #cbd5e1;
+$orange-500: #f97316;
+$orange-600: #ea580c;
+
+// Status Palette
+$success-color: #22c55e;
+$warning-color: #f59e0b;
+$error-color: #ef4444;
+$info-color: #3b82f6;
+
+/* Layout & Typography Tokens */
+$grid-columns: 12;
+$grid-gap: 24px;
+$card-min-width: 0; // Prevent pushing off screen
+$chart-min-height: 450px;
+$font-h1: 2rem;
+$font-base: 1rem;
+
+/* -------------------------------------------------------------------------
+   Glassmorphism Mixins
+   ------------------------------------------------------------------------- */
+
+// Base Glass Card Mixin
+@mixin glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.1), 0 2px 8px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+@mixin glass-capsule {
+  position: relative;
+  overflow: hidden !important;
+}
+
+.glass-capsule {
+  @include glass-capsule;
+}
+
+@mixin strict-grid {
+  display: grid;
+  // Make grid fluid by default, avoid 12 statically forced columns that break on resize/zoom
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: #{$grid-gap};
+  width: 100%;
+  min-width: 0; // Critical for flex/grid children so they can shrink below their content size
+}
+
+.strict-grid {
+  @include strict-grid;
+}
+
+/* -------------------------------------------------------------------------
+   Table Row Interactions & Mixins
+   ------------------------------------------------------------------------- */
+@mixin interactive-row {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+// Action button sizing and hover inside tables
+@mixin action-icon-btn {
+  color: $slate-400;
+  transition: all 0.2s ease;
+  width: 40px !important;
+  height: 40px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50% !important;
+
+  &:hover {
+    color: $white;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Status Pills (Chips)
+   ------------------------------------------------------------------------- */
+@mixin status-pill($base-color) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: 999px; // Pill shape instead of slightly rounded
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba($base-color, 0.15);
+  color: $base-color;
+  border: 1px solid rgba($base-color, 0.3);
+}
+
+// Preset Pills
+.pill-success {
+  @include status-pill($success-color);
+}
+
+.pill-pending {
+  @include status-pill($warning-color);
+}
+
+.pill-cancelled {
+  @include status-pill($error-color);
+}
+
+.pill-info {
+  @include status-pill($info-color);
+}
+
+/* -------------------------------------------------------------------------
+   Typography Helpers
+   ------------------------------------------------------------------------- */
+@mixin currency-bold {
+  font-weight: 700;
+  color: $white;
+  letter-spacing: -0.01em;
+}
+
+@mixin primary-name-bold {
+  font-weight: 600;
+  color: $white;
+}
+
+/* -------------------------------------------------------------------------
+   Spacing & Grid (8pt system)
+   ------------------------------------------------------------------------- */
+// General container padding
+.standard-padding {
+  padding: 2rem;
+  box-sizing: border-box;
+}

@@ -1,0 +1,102 @@
+<h2 mat-dialog-title>
+  <mat-icon style="vertical-align: middle; margin-right: 8px; color: var(--primary-blue);">
+    {{ isEdit ? 'edit_note' : 'add_circle' }}
+  </mat-icon>
+  {{ isEdit ? 'Edit Product' : 'Add New Product' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="product-form">
+    <p class="section-label">Core Details</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Product Name</mat-label>
+      <input matInput formControlName="name" placeholder="e.g. Wireless Keyboard" />
+      <mat-icon matSuffix>label</mat-icon>
+      @if (name?.hasError('required') && name?.touched) {
+      <mat-error>Name is required</mat-error>
+      }
+      @if (name?.hasError('minlength') && name?.touched) {
+      <mat-error>Name must be at least 2 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Price ($)</mat-label>
+        <input matInput type="number" formControlName="price" min="0" step="0.01" />
+        <mat-icon matSuffix>attach_money</mat-icon>
+        @if (price?.hasError('required') && price?.touched) {
+        <mat-error>Price is required</mat-error>
+        }
+        @if (price?.hasError('min') && price?.touched) {
+        <mat-error>Price must be ≥ 0</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Stock Quantity</mat-label>
+        <input matInput type="number" formControlName="stockQuantity" min="0" />
+        <mat-icon matSuffix>inventory</mat-icon>
+        @if (stockQuantity?.hasError('required') && stockQuantity?.touched) {
+        <mat-error>Stock is required</mat-error>
+        }
+        @if (stockQuantity?.hasError('min') && stockQuantity?.touched) {
+        <mat-error>Stock must be ≥ 0</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Low Stock Threshold</mat-label>
+      <input matInput type="number" formControlName="lowStockThreshold" min="0" />
+      <mat-icon matSuffix>warning_amber</mat-icon>
+      <mat-hint>Alert when stock falls below this number</mat-hint>
+      @if (lowStockThreshold?.hasError('min') && lowStockThreshold?.touched) {
+      <mat-error>Threshold must be ≥ 0</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-divider style="margin: 0.5rem 0 1rem;"></mat-divider>
+    <p class="section-label">Additional Information <span class="optional">(optional)</span></p>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>SKU</mat-label>
+        <input matInput formControlName="sku" placeholder="e.g. WK-2024-BLK" />
+        <mat-icon matSuffix>qr_code</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Supplier</mat-label>
+        <mat-select formControlName="supplierId">
+          <mat-option [value]="null">No Supplier</mat-option>
+          @for (s of suppliers; track s.id) {
+            <mat-option [value]="s.id">{{ s.name }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matSuffix>local_shipping</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Image URL</mat-label>
+      <input matInput formControlName="imageUrl" placeholder="https://..." />
+      <mat-icon matSuffix>image</mat-icon>
+    </mat-form-field>
+
+    <div style="margin-top: 0.5rem;">
+      <mat-checkbox formControlName="isActive" color="primary">
+        Product is active and available for sale
+      </mat-checkbox>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button class="btn-submit" (click)="onSubmit()" [disabled]="form.invalid">
+    <mat-icon>{{ isEdit ? 'save' : 'add' }}</mat-icon>
+    {{ isEdit ? 'Save Changes' : 'Add Product' }}
+  </button>
+</mat-dialog-actions>

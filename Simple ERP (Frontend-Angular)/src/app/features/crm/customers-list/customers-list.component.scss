@@ -1,0 +1,644 @@
+/* -------------------------------------------------------------------------- */
+/* CRM Dashboard Layout & Container                                           */
+/* -------------------------------------------------------------------------- */
+.crm-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+
+  /* Theme variables (mirroring ERP brand) */
+  --erp-bg-dark: #121212;
+  --erp-card-bg: #1e1e1e;
+  --erp-glass-bg: rgba(30, 30, 30, 0.7);
+  --erp-border: rgba(255, 255, 255, 0.08);
+  --erp-text-main: #ffffff;
+  --erp-text-muted: #a0a0a0;
+  --erp-primary: #ff6600;
+  /* Orange brand */
+  --erp-primary-alpha: rgba(255, 102, 0, 0.2);
+  --erp-accent: #ff4081;
+  /* Pink/Purple accent */
+  --erp-success: #4caf50;
+  --erp-success-alpha: rgba(76, 175, 80, 0.15);
+  --erp-warning: #ff9800;
+  --erp-warning-alpha: rgba(255, 152, 0, 0.15);
+  --erp-danger: #f44336;
+  --erp-danger-alpha: rgba(244, 67, 54, 0.15);
+  --erp-info: #2196f3;
+  --erp-info-alpha: rgba(33, 150, 243, 0.15);
+  --erp-purple: #9c27b0;
+  --erp-purple-alpha: rgba(156, 39, 176, 0.15);
+}
+
+.glass-card {
+  background: var(--erp-glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--erp-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--erp-text-main);
+}
+
+.text-muted {
+  color: var(--erp-text-muted);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 1. Header Area                                                             */
+/* -------------------------------------------------------------------------- */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: var(--erp-text-main);
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+
+    button {
+      border-radius: 8px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      padding: 0 1.25rem;
+
+      mat-icon {
+        margin-right: 6px;
+      }
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. KPI Metrics Grid                                                        */
+/* -------------------------------------------------------------------------- */
+.crm-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+
+  .kpi-card {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .kpi-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      flex-shrink: 0;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      &.active {
+        background: var(--erp-info-alpha);
+        color: var(--erp-info);
+      }
+
+      &.revenue {
+        background: rgba(255, 102, 0, 0.15);
+        color: var(--erp-primary);
+      }
+
+      &.tier {
+        background: var(--erp-purple-alpha);
+        color: var(--erp-purple);
+      }
+    }
+
+    .kpi-content {
+      display: flex;
+      flex-direction: column;
+
+      .kpi-title {
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--erp-text-muted);
+        margin: 0 0 0.25rem 0;
+      }
+
+      .kpi-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--erp-text-main);
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+
+        .kpi-sub {
+          font-size: 0.9rem;
+          color: var(--erp-text-muted);
+          font-weight: 500;
+        }
+      }
+
+      .kpi-trend {
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 600;
+
+        mat-icon {
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
+        }
+
+        &.positive {
+          color: var(--erp-success);
+        }
+
+        &.warning {
+          color: var(--erp-warning);
+        }
+
+        &.neutral {
+          color: var(--erp-info);
+        }
+      }
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. CRM Insight Charts Grid                                                */
+/* -------------------------------------------------------------------------- */
+.crm-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+
+    /* Spans */
+    &:nth-child(1) {
+      grid-column: span 2;
+
+      @media (max-width: 800px) {
+        grid-column: span 1;
+      }
+    }
+
+    &:nth-child(2) {
+      grid-column: span 2;
+
+      @media (max-width: 800px) {
+        grid-column: span 1;
+      }
+    }
+
+    &:nth-child(3) {
+      grid-column: span 2;
+
+      @media (max-width: 800px) {
+        grid-column: span 1;
+      }
+    }
+
+    &:nth-child(4) {
+      grid-column: span 2;
+
+      @media (max-width: 800px) {
+        grid-column: span 1;
+      }
+    }
+
+    .chart-header {
+      margin-bottom: 1rem;
+
+      h3 {
+        font-size: 1.1rem;
+        margin: 0 0 0.2rem 0;
+        color: var(--erp-text-main);
+        font-weight: 600;
+      }
+
+      p {
+        font-size: 0.8rem;
+        color: var(--erp-text-muted);
+        margin: 0;
+      }
+    }
+
+    .chart-container {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      min-height: 200px;
+      /* Base height to prevent collapse */
+      max-height: 280px;
+
+      &.line-chart,
+      &.bar-chart {
+        max-height: 280px;
+      }
+
+      &.doughnut-chart {
+        max-height: 260px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. Filters Toolbar                                                        */
+/* -------------------------------------------------------------------------- */
+.filters-toolbar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+
+  /* Form overrides for dark theme */
+  ::ng-deep {
+    .mat-mdc-text-field-wrapper {
+      background-color: rgba(255, 255, 255, 0.03) !important;
+      border-radius: 8px !important;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--erp-border) !important;
+    }
+  }
+
+  .search-field {
+    flex: 2;
+    min-width: 250px;
+  }
+
+  .filter-field {
+    flex: 1;
+    min-width: 160px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. Customers Table & Drawer                                               */
+/* -------------------------------------------------------------------------- */
+.crm-drawer-container {
+  height: 600px;
+  background: transparent;
+
+  @media (max-width: 1024px) {
+    height: auto;
+    min-height: 500px;
+  }
+}
+
+.table-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    gap: 1rem;
+    color: var(--erp-text-muted);
+  }
+
+  .table-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: auto;
+
+    /* Scrollbar styling */
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+  }
+
+  /* Table base */
+  .crm-table {
+    width: 100%;
+    background: transparent;
+    color: var(--erp-text-main);
+
+    th.mat-header-cell {
+      color: var(--erp-text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--erp-border);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 12px 16px;
+      white-space: nowrap;
+    }
+
+    td.mat-cell {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px 16px;
+      color: var(--erp-text-main);
+      vertical-align: middle;
+    }
+
+    .crm-row {
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+    }
+  }
+
+  /* Custom Cells */
+  .customer-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+
+    .avatar-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--erp-primary) 0%, var(--erp-accent) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .customer-info {
+      display: flex;
+      flex-direction: column;
+
+      .name {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .id {
+        font-size: 0.75rem;
+        color: var(--erp-text-muted);
+      }
+    }
+  }
+
+  .contact-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    white-space: nowrap;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--erp-text-muted);
+
+      mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+        color: var(--erp-text-muted);
+      }
+    }
+  }
+
+  .segment-text {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--erp-text-main);
+  }
+
+  .loyalty-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+
+    &.bronze {
+      background: rgba(205, 127, 50, 0.15);
+      color: #cd7f32;
+      border: 1px solid rgba(205, 127, 50, 0.3);
+    }
+
+    &.silver {
+      background: rgba(192, 192, 192, 0.15);
+      color: #e0e0e0;
+      border: 1px solid rgba(192, 192, 192, 0.3);
+    }
+
+    &.gold {
+      background: rgba(255, 215, 0, 0.15);
+      color: #ffd700;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    &.vip {
+      background: linear-gradient(45deg, rgba(156, 39, 176, 0.2), rgba(255, 64, 129, 0.2));
+      color: #ff4081;
+      border: 1px solid rgba(255, 64, 129, 0.3);
+    }
+  }
+
+  .financial-cell {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+
+    .balance {
+      font-weight: 700;
+      font-size: 0.9rem;
+
+      &.negative {
+        color: var(--erp-danger);
+      }
+
+      &.positive {
+        color: var(--erp-success);
+      }
+    }
+
+    .spent {
+      font-size: 0.75rem;
+      color: var(--erp-text-muted);
+    }
+  }
+
+  .status-pill-container {
+    display: flex;
+  }
+
+  .status-pill {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.status-active {
+      background: var(--erp-success-alpha);
+      color: var(--erp-success);
+    }
+
+    &.status-inactive {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ccc;
+    }
+
+    &.status-overdue {
+      background: var(--erp-danger-alpha);
+      color: var(--erp-danger);
+    }
+  }
+
+  .actions-cell {
+    .action-circles {
+      display: flex;
+      gap: 6px;
+
+      .circle-btn {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--erp-text-muted);
+        transition: all 0.2s ease;
+
+        mat-icon {
+          font-size: 16px;
+          position: relative;
+          top: -2px;
+        }
+
+        &:hover {
+          background: var(--erp-text-main);
+          color: var(--erp-bg-dark);
+
+          &.view {
+            background: var(--erp-info);
+            color: white;
+          }
+
+          &.edit {
+            background: var(--erp-warning);
+            color: white;
+          }
+
+          &.create {
+            background: var(--erp-primary);
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Drawer Customization                                                       */
+/* -------------------------------------------------------------------------- */
+.side-drawer {
+  width: 400px;
+  background: #1a1a1a;
+  border-left: 1px solid var(--erp-border);
+  color: var(--erp-text-main);
+
+  @media (max-width: 600px) {
+    width: 100vw;
+  }
+
+  .drawer-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+    }
+
+    .summary-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--erp-border);
+      border-radius: 8px;
+    }
+  }
+}

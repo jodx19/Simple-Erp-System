@@ -1,0 +1,6 @@
+@SimpleERP_HostAddress = http://localhost:5245
+
+GET {{SimpleERP_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

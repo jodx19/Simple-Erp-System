@@ -1,0 +1,145 @@
+<div class="dashboard-container standard-padding">
+  <!-- Header Row -->
+  <header class="header-section">
+    <div class="title-group">
+      <h1>Operational Intelligence</h1>
+      <p class="subtitle">Enterprise Resource Planning & Performance Analytics</p>
+    </div>
+    <button mat-button (click)="loadData()" class="refresh-btn">
+      <mat-icon>refresh</mat-icon>
+      Refresh Dashboard
+    </button>
+  </header>
+
+  @if (isLoading) {
+  <div class="loader-overlay">
+    <mat-spinner diameter="48" strokeWidth="4" color="accent"></mat-spinner>
+    <span>Synchronizing Enterprise Intelligence...</span>
+  </div>
+  } @else if (hasError) {
+  <div class="error-card">
+    <mat-icon>cloud_off</mat-icon>
+    <h3>Intelligence Link Interrupted</h3>
+    <p>Unable to synchronize with core services. Verify your connection to the ERP backbone.</p>
+    <button mat-flat-button color="primary" (click)="loadData()">Reconnect Hub</button>
+  </div>
+  } @else {
+  <!-- Top Row: 4 KPI Cards -->
+  <section class="kpi-grid">
+    <div class="kpi-card sales">
+      <div class="icon-box"><mat-icon>payments</mat-icon></div>
+      <div class="kpi-data">
+        <span class="label">Today's Revenue</span>
+        <span class="value">{{ stats?.todaySales | currency:'USD' }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card inventory">
+      <div class="icon-box"><mat-icon>inventory_2</mat-icon></div>
+      <div class="kpi-data">
+        <span class="label">Stock Valuation</span>
+        <span class="value">{{ stats?.totalStockValue | currency:'USD' }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card orders">
+      <div class="icon-box"><mat-icon>shopping_cart</mat-icon></div>
+      <div class="kpi-data">
+        <span class="label">Daily Orders</span>
+        <span class="value">{{ stats?.recentOrdersCount }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card alerts" [class.pulse-critical]="(stats?.outOfStockCount || 0) > 5">
+      <div class="icon-box"><mat-icon>report_problem</mat-icon></div>
+      <div class="kpi-data">
+        <span class="label">Stock Alerts</span>
+        <span class="value">{{ stats?.outOfStockCount }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Middle Row: 65/35 Charts -->
+  <section class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="title-group">
+          <h3>Revenue Performance</h3>
+          <p>7-Day Sales Trend Analysis</p>
+        </div>
+        <mat-icon style="color: #6366f1">analytics</mat-icon>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart [data]="salesChartData" [options]="chartOptions" [type]="'bar'">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="title-group">
+          <h3>Inventory Flow</h3>
+          <p>Active vs Inactive Stock</p>
+        </div>
+        <mat-icon style="color: #10b981">pie_chart</mat-icon>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart [data]="stockChartData" [options]="chartOptions" [type]="'doughnut'">
+        </canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Row: Full-width Table -->
+  <section class="transactions-section">
+    <div class="section-header">
+      <h3>Recent Transactions</h3>
+      <button mat-button class="explore-btn" routerLink="/orders">
+        View All Transactions <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+    <div class="table-scroll-container">
+      <table mat-table [dataSource]="recentOrders">
+        <ng-container matColumnDef="customer">
+          <th mat-header-cell *matHeaderCellDef> Customer </th>
+          <td mat-cell *matCellDef="let order">
+            <div class="customer-cell">
+              <mat-icon>person</mat-icon>
+              <span>{{ order.customerName }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Date </th>
+          <td mat-cell *matCellDef="let order"> {{ order.orderDate | date:'mediumDate' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> Total Amount </th>
+          <td mat-cell *matCellDef="let order" class="amount-cell"> {{ order.totalAmount | currency }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <td mat-cell *matCellDef="let order">
+            <span [class]="getStatusClass(order.status)">
+              {{ getStatusLabel(order.status) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4" style="text-align: center; padding: 2rem; color: #64748b;">
+            Securely synchronized. No recent transaction data found.
+          </td>
+        </tr>
+      </table>
+    </div>
+  </section>
+  }
+</div>

@@ -1,0 +1,173 @@
+<div class="trail-container standard-padding">
+  <div class="trail-header">
+    <div class="title-group">
+      <h1 class="page-title">Activity Trail</h1>
+      <p class="subtitle">System Audit Log & Event Timeline</p>
+    </div>
+  </div>
+
+  @if (isLoading && !rawLogs.length) {
+  <div class="loader-overlay">
+    <mat-spinner diameter="44" strokeWidth="4"></mat-spinner>
+    <span>Compiling event intelligence...</span>
+  </div>
+  } @else if (hasError) {
+  <div class="error-card">
+    <mat-icon>history_toggle_off</mat-icon>
+    <h3>Auditing Service Interrupted</h3>
+    <p>Unable to retrieve system events. Check local database connection.</p>
+    <button mat-flat-button color="primary" (click)="loadLogs()">Retry Connection</button>
+  </div>
+  } @else {
+  <!-- KPI Metrics -->
+  <div class="kpi-grid">
+    <div class="kpi-card glass-card">
+      <div class="kpi-icon-wrapper blue">
+        <mat-icon>today</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h4>Events Today</h4>
+        <span class="kpi-value">{{ eventsToday }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card glass-card">
+      <div class="kpi-icon-wrapper green">
+        <mat-icon>person</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h4>User Actions</h4>
+        <span class="kpi-value">{{ userActionsCount }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card glass-card">
+      <div class="kpi-icon-wrapper orange">
+        <mat-icon>warning</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h4>Warnings</h4>
+        <span class="kpi-value">{{ warningsCount }}</span>
+      </div>
+    </div>
+
+    <div class="kpi-card glass-card">
+      <div class="kpi-icon-wrapper red">
+        <mat-icon>security</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h4>Security Events</h4>
+        <span class="kpi-value">{{ securityEventsCount }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Advanced Filters -->
+  <div class="filters-section glass-card">
+    <div class="filter-header">
+      <mat-icon>filter_list</mat-icon>
+      <span>Filter Operations</span>
+    </div>
+    <div class="filter-grid">
+      <div class="filter-field">
+        <label>User</label>
+        <select [(ngModel)]="selectedUser" (ngModelChange)="applyFilters()">
+          <option value="All">All Users</option>
+          @for (user of users; track user) {
+          <option [value]="user">{{ user }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label>Action Type</label>
+        <select [(ngModel)]="selectedAction" (ngModelChange)="applyFilters()">
+          <option value="All">All Actions</option>
+          @for (act of actions; track act) {
+          <option [value]="act">{{ act }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label>Module</label>
+        <select [(ngModel)]="selectedModule" (ngModelChange)="applyFilters()">
+          <option value="All">All Modules</option>
+          @for (mod of modules; track mod) {
+          <option [value]="mod">{{ mod }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label>Severity</label>
+        <select [(ngModel)]="selectedSeverity" (ngModelChange)="applyFilters()">
+          <option value="All">All Severities</option>
+          <option value="Info">Info (Blue)</option>
+          <option value="Success">Success (Green)</option>
+          <option value="Warning">Warning (Orange)</option>
+          <option value="Critical">Critical (Red)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Timeline -->
+  <div class="timeline-container">
+    @if (logs.length === 0) {
+    <div class="empty-state glass-card">
+      <mat-icon>query_stats</mat-icon>
+      <p>No activity events match your active filters.</p>
+      <button mat-stroked-button color="primary"
+        (click)="selectedUser='All'; selectedAction='All'; selectedModule='All'; selectedSeverity='All'; applyFilters()">Reset
+        Filters</button>
+    </div>
+    } @else {
+    <div class="timeline">
+      <div class="timeline-line"></div>
+
+      @for (item of logs; track item.id) {
+      <!-- Severity drives color styling -->
+      <div class="timeline-item" [ngClass]="'severity-' + getSeverity(item.action, item.entityName)">
+
+        <div class="timeline-marker">
+          <mat-icon>{{ getSeverityIcon(getSeverity(item.action, item.entityName)) }}</mat-icon>
+        </div>
+
+        <div class="timeline-content glass-card">
+          <div class="event-header">
+            <div class="time-block">
+              <span class="time">{{ item.timestamp | date:'shortTime' }}</span>
+              <span class="date">{{ item.timestamp | date:'MMM d, y' }}</span>
+            </div>
+            <div class="severity-badge">{{ getSeverity(item.action, item.entityName) }}</div>
+          </div>
+
+          <div class="event-body">
+            <div class="actor">
+              <div class="avatar">{{ getInitials(item.user?.fullName) }}</div>
+              <span class="actor-name">{{ item.user?.fullName || 'System' }}</span>
+            </div>
+
+            <div class="action-details">
+              <p class="primary-text">
+                <span class="action-text">{{ item.action }}</span>
+                <span class="target" [routerLink]="getEntityLink(item.entityName)">{{ item.entityName }}</span>
+              </p>
+
+              @if (item.changes) {
+              <div class="changes-block">
+                <mat-icon>subject</mat-icon>
+                <span>{{ item.changes }}</span>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>
