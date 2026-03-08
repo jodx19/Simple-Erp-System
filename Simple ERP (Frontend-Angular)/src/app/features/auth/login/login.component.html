@@ -1,47 +1,142 @@
 <div class="auth-container">
-  <mat-card class="auth-glass-card login-card">
-    <mat-card-header>
-      <mat-card-title>Sign In</mat-card-title>
-      <mat-card-subtitle>Enterprise Resource Planning</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="admin@example.com" />
-          <mat-icon matPrefix>email</mat-icon>
-          @if (email?.hasError('required') && email?.touched) {
-          <mat-error>Email is required</mat-error>
-          }
-          @if (email?.hasError('email') && email?.touched) {
-          <mat-error>Please enter a valid email</mat-error>
-          }
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" />
-          <mat-icon matPrefix>lock</mat-icon>
-          @if (password?.hasError('required') && password?.touched) {
-          <mat-error>Password is required</mat-error>
-          }
-          @if (password?.hasError('minlength') && password?.touched) {
-          <mat-error>Password must be at least 6 characters</mat-error>
-          }
-        </mat-form-field>
-        <button mat-flat-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading"
-          class="btn-primary full-width action-btn">
-          @if (isLoading) {
-          <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
-          } @else {
-          Login
-          }
-        </button>
+  <!-- Background Elements -->
+  <div class="auth-bg-elements">
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+  </div>
 
-        <div class="auth-links">
-          <span>Don't have an account? </span>
-          <a routerLink="/register">Register here</a>
+  <div class="auth-wrapper">
+    <!-- Left Side - Branding -->
+    <div class="auth-branding">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <mat-icon>business</mat-icon>
+          <span>ERP System</span>
         </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+        <h1 class="brand-title">Welcome Back!</h1>
+        <p class="brand-description">
+          Streamline your business operations with our comprehensive ERP solution.
+          Manage orders, inventory, customers, and more in one place.
+        </p>
+        <div class="brand-features">
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Role-based Access Control</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Real-time Analytics</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Complete Audit Trail</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Login Form -->
+    <div class="auth-form-container">
+      <mat-card class="auth-glass-card login-card">
+        <mat-card-header>
+          <div class="header-icon">
+            <mat-icon>login</mat-icon>
+          </div>
+          <mat-card-title>Sign In</mat-card-title>
+          <mat-card-subtitle>Enter your credentials to access the system</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email Address</mat-label>
+              <input matInput type="email" formControlName="email" placeholder="Enter your email" />
+              <mat-icon matPrefix>email</mat-icon>
+              @if (email?.hasError('required') && email?.touched) {
+              <mat-error>Email is required</mat-error>
+              }
+              @if (email?.hasError('email') && email?.touched) {
+              <mat-error>Please enter a valid email</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+              <mat-icon matPrefix>lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" class="toggle-password">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (password?.hasError('required') && password?.touched) {
+              <mat-error>Password is required</mat-error>
+              }
+              @if (password?.hasError('minlength') && password?.touched) {
+              <mat-error>Password must be at least 6 characters</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="form-options">
+              <label class="remember-me">
+                <input type="checkbox" formControlName="rememberMe">
+                <span>Remember me</span>
+              </label>
+              <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button mat-flat-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading"
+              class="btn-primary full-width action-btn">
+              @if (isLoading) {
+              <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
+              } @else {
+              <mat-icon>arrow_forward</mat-icon>
+              Sign In
+              }
+            </button>
+          </form>
+
+          <!-- Demo Accounts Section -->
+          <div class="demo-section">
+            <div class="divider">
+              <span>Quick Demo Login</span>
+            </div>
+            <div class="demo-buttons">
+              <button type="button" class="demo-btn admin" (click)="fillDemoAccount('admin')">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <div class="demo-info">
+                  <span class="demo-role">Admin</span>
+                  <span class="demo-email">admin&#64;erp.com</span>
+                </div>
+              </button>
+              <button type="button" class="demo-btn manager" (click)="fillDemoAccount('manager')">
+                <mat-icon>manage_accounts</mat-icon>
+                <div class="demo-info">
+                  <span class="demo-role">Manager</span>
+                  <span class="demo-email">manager&#64;erp.com</span>
+                </div>
+              </button>
+              <button type="button" class="demo-btn employee" (click)="fillDemoAccount('employee')">
+                <mat-icon>person</mat-icon>
+                <div class="demo-info">
+                  <span class="demo-role">Employee</span>
+                  <span class="demo-email">employee&#64;erp.com</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-links">
+            <span>Don't have an account?</span>
+            <a routerLink="/register">Create account</a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Back to Landing -->
+      <a routerLink="/landing" class="back-to-landing">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Home
+      </a>
+    </div>
+  </div>
 </div>

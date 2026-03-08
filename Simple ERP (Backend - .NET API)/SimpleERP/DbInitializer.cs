@@ -24,8 +24,9 @@ namespace SimpleERP
                 }
             }
 
-            // 2. Ensure Super Admin
-            var adminEmail = "admin@example.com";
+            // 2. Ensure Demo Accounts
+            // Admin Account
+            var adminEmail = "admin@erp.com";
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
             {
@@ -33,12 +34,46 @@ namespace SimpleERP
                 {
                     UserName = "admin",
                     Email = adminEmail,
-                    FullName = "Super Admin",
+                    FullName = "System Administrator",
                     EmailConfirmed = true,
                     IsActive = true
                 };
                 await userManager.CreateAsync(adminUser, "Admin123!");
                 await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+
+            // Manager Account
+            var managerEmail = "manager@erp.com";
+            var managerUser = await userManager.FindByEmailAsync(managerEmail);
+            if (managerUser == null)
+            {
+                managerUser = new ApplicationUser
+                {
+                    UserName = "manager",
+                    Email = managerEmail,
+                    FullName = "Department Manager",
+                    EmailConfirmed = true,
+                    IsActive = true
+                };
+                await userManager.CreateAsync(managerUser, "Manager123!");
+                await userManager.AddToRoleAsync(managerUser, "Manager");
+            }
+
+            // Employee Account
+            var employeeEmail = "employee@erp.com";
+            var employeeUser = await userManager.FindByEmailAsync(employeeEmail);
+            if (employeeUser == null)
+            {
+                employeeUser = new ApplicationUser
+                {
+                    UserName = "employee",
+                    Email = employeeEmail,
+                    FullName = "Staff Employee",
+                    EmailConfirmed = true,
+                    IsActive = true
+                };
+                await userManager.CreateAsync(employeeUser, "Employee123!");
+                await userManager.AddToRoleAsync(employeeUser, "Employee");
             }
 
             // 3. Ensure Company Settings

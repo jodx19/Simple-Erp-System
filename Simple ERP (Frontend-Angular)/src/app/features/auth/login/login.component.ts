@@ -38,15 +38,34 @@ export class LoginComponent {
   private snackBar = inject(MatSnackBar);
   private cdr = inject(ChangeDetectorRef);
 
+  hidePassword = true;
+
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
+    rememberMe: [false],
   });
 
   isLoading = false;
 
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
+
+  demoAccounts = {
+    admin: { email: 'admin@erp.com', password: 'Admin123!' },
+    manager: { email: 'manager@erp.com', password: 'Manager123!' },
+    employee: { email: 'employee@erp.com', password: 'Employee123!' }
+  };
+
+  fillDemoAccount(role: 'admin' | 'manager' | 'employee'): void {
+    const account = this.demoAccounts[role];
+    this.loginForm.patchValue({
+      email: account.email,
+      password: account.password
+    });
+    this.cdr.detectChanges();
+    this.snackBar.open(`${role.charAt(0).toUpperCase() + role.slice(1)} credentials filled. Click Sign In to continue.`, 'Dismiss', { duration: 3000 });
+  }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {

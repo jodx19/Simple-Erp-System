@@ -1,74 +1,137 @@
 <div class="auth-container">
-  <mat-card class="auth-glass-card register-card">
-    <mat-card-header>
-      <mat-card-title>Create an Account</mat-card-title>
-      <mat-card-subtitle>Enter your details to get started</mat-card-subtitle>
-    </mat-card-header>
+  <!-- Background Elements -->
+  <div class="auth-bg-elements">
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+  </div>
 
-    <mat-card-content>
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Full Name</mat-label>
-          <input matInput formControlName="fullName" placeholder="John Doe" />
-          <mat-icon matPrefix>badge</mat-icon>
-          @if (fullName?.hasError('required') && fullName?.touched) {
-          <mat-error>Full name is required</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Username</mat-label>
-          <input matInput formControlName="username" placeholder="johndoe" />
-          <mat-icon matPrefix>person</mat-icon>
-          @if (username?.hasError('required') && username?.touched) {
-          <mat-error>Username is required</mat-error>
-          }
-          @if (username?.hasError('minlength') && username?.touched) {
-          <mat-error>Username must be at least 3 characters</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email Address</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="johndoe@example.com" />
-          <mat-icon matPrefix>email</mat-icon>
-          @if (email?.hasError('required') && email?.touched) {
-          <mat-error>Email is required</mat-error>
-          }
-          @if (email?.hasError('email') && email?.touched) {
-          <mat-error>Please enter a valid email</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" />
-          <mat-icon matPrefix>lock</mat-icon>
-          @if (password?.hasError('required') && password?.touched) {
-          <mat-error>Password is required</mat-error>
-          }
-          @if (password?.hasError('minlength') && password?.touched) {
-          <mat-error>Password must be at least 6 characters</mat-error>
-          }
-        </mat-form-field>
-
-
-
-        <button mat-flat-button color="primary" type="submit" [disabled]="registerForm.invalid || isLoading"
-          class="btn-primary full-width action-btn">
-          @if (isLoading) {
-          <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
-          } @else {
-          Register
-          }
-        </button>
-
-        <div class="auth-links">
-          <span>Already have an account? </span>
-          <a routerLink="/login">Sign in here</a>
+  <div class="auth-wrapper">
+    <!-- Left Side - Branding -->
+    <div class="auth-branding">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <mat-icon>business</mat-icon>
+          <span>ERP System</span>
         </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+        <h1 class="brand-title">Join Us Today!</h1>
+        <p class="brand-description">
+          Start your journey with our comprehensive ERP solution.
+          Streamline operations, manage resources, and grow your business.
+        </p>
+        <div class="brand-features">
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Free 30-day Trial</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>No Credit Card Required</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>24/7 Support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Register Form -->
+    <div class="auth-form-container">
+      <mat-card class="auth-glass-card register-card">
+        <mat-card-header>
+          <div class="header-icon">
+            <mat-icon>person_add</mat-icon>
+          </div>
+          <mat-card-title>Create Account</mat-card-title>
+          <mat-card-subtitle>Fill in your details to get started</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="fullName" placeholder="John Doe" />
+                <mat-icon matPrefix>badge</mat-icon>
+                @if (fullName?.hasError('required') && fullName?.touched) {
+                <mat-error>Full name is required</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Username</mat-label>
+                <input matInput formControlName="username" placeholder="johndoe" />
+                <mat-icon matPrefix>person</mat-icon>
+                @if (username?.hasError('required') && username?.touched) {
+                <mat-error>Username is required</mat-error>
+                }
+                @if (username?.hasError('minlength') && username?.touched) {
+                <mat-error>Min 3 characters</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email Address</mat-label>
+              <input matInput type="email" formControlName="email" placeholder="johndoe@example.com" />
+              <mat-icon matPrefix>email</mat-icon>
+              @if (email?.hasError('required') && email?.touched) {
+              <mat-error>Email is required</mat-error>
+              }
+              @if (email?.hasError('email') && email?.touched) {
+              <mat-error>Please enter a valid email</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+              <mat-icon matPrefix>lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" class="toggle-password">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (password?.hasError('required') && password?.touched) {
+              <mat-error>Password is required</mat-error>
+              }
+              @if (password?.hasError('minlength') && password?.touched) {
+              <mat-error>Password must be at least 6 characters</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="terms-checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="agreeTerms">
+                <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+              </label>
+              @if (agreeTerms?.hasError('required') && agreeTerms?.touched) {
+              <mat-error class="checkbox-error">You must agree to the terms</mat-error>
+              }
+            </div>
+
+            <button mat-flat-button color="primary" type="submit" [disabled]="registerForm.invalid || isLoading"
+              class="btn-primary full-width action-btn">
+              @if (isLoading) {
+              <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
+              } @else {
+              <mat-icon>arrow_forward</mat-icon>
+              Create Account
+              }
+            </button>
+
+            <div class="auth-links">
+              <span>Already have an account?</span>
+              <a routerLink="/login">Sign in here</a>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Back to Landing -->
+      <a routerLink="/landing" class="back-to-landing">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Home
+      </a>
+    </div>
+  </div>
 </div>

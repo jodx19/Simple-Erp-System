@@ -1,0 +1,243 @@
+<div class="landing-container">
+  <!-- Navigation -->
+  <nav class="landing-nav">
+    <div class="nav-brand">
+      <mat-icon class="brand-icon">business</mat-icon>
+      <span class="brand-text">ERP System</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link" (click)="scrollToSection('features')">Features</button>
+      <button class="nav-link" (click)="scrollToSection('tech-stack')">Tech Stack</button>
+      <button class="nav-link" (click)="scrollToSection('screenshots')">Screenshots</button>
+      <button class="nav-link" (click)="scrollToSection('demo')">Demo</button>
+    </div>
+    <div class="nav-actions">
+      <a mat-flat-button class="btn-login" routerLink="/login">
+        <mat-icon>login</mat-icon>
+        Sign In
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg-elements">
+      <div class="hero-circle circle-1"></div>
+      <div class="hero-circle circle-2"></div>
+      <div class="hero-circle circle-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <mat-icon>verified</mat-icon>
+        <span>Enterprise Ready</span>
+      </div>
+      <h1 class="hero-title">
+        Modern <span class="gradient-text">ERP System</span><br>
+        For Your Business
+      </h1>
+      <p class="hero-subtitle">
+        A comprehensive enterprise resource planning solution with role-based authentication,
+        real-time analytics, inventory management, POS system, and complete audit trails.
+      </p>
+      <div class="hero-actions">
+        <a mat-flat-button class="btn-primary btn-large" routerLink="/login">
+          <mat-icon>rocket_launch</mat-icon>
+          Get Started
+        </a>
+        <button mat-stroked-button class="btn-secondary btn-large" (click)="scrollToSection('features')">
+          <mat-icon>explore</mat-icon>
+          Explore Features
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <span class="stat-label">Core Modules</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">3</span>
+          <span class="stat-label">User Roles</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Responsive</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section">
+    <div class="section-header">
+      <span class="section-tag">Features</span>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-subtitle">
+        A complete suite of business management tools designed to streamline your operations
+      </p>
+    </div>
+    <div class="features-grid">
+      @for (feature of features; track feature.title) {
+      <mat-card class="feature-card">
+        <div class="feature-icon-wrapper" [style.--icon-color]="'var(--primary-orange)'">
+          <mat-icon>{{ feature.icon }}</mat-icon>
+        </div>
+        <h3 class="feature-title">{{ feature.title }}</h3>
+        <p class="feature-description">{{ feature.description }}</p>
+      </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- Tech Stack Section -->
+  <section id="tech-stack" class="tech-stack-section">
+    <div class="section-header">
+      <span class="section-tag">Technology</span>
+      <h2 class="section-title">Built With Modern Tech</h2>
+      <p class="section-subtitle">
+        Powered by industry-leading technologies for performance and scalability
+      </p>
+    </div>
+    <div class="tech-categories">
+      <div class="tech-category">
+        <h3 class="category-title">
+          <mat-icon>computer</mat-icon>
+          Frontend
+        </h3>
+        <div class="tech-items">
+          @for (tech of techStack | slice:0:5; track tech.name) {
+          <div class="tech-item">
+            <mat-icon>{{ tech.icon }}</mat-icon>
+            <span>{{ tech.name }}</span>
+          </div>
+          }
+        </div>
+      </div>
+      <div class="tech-category">
+        <h3 class="category-title">
+          <mat-icon>dns</mat-icon>
+          Backend
+        </h3>
+        <div class="tech-items">
+          @for (tech of techStack | slice:5; track tech.name) {
+          <div class="tech-item">
+            <mat-icon>{{ tech.icon }}</mat-icon>
+            <span>{{ tech.name }}</span>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshots Section -->
+  <section id="screenshots" class="screenshots-section">
+    <div class="section-header">
+      <span class="section-tag">Preview</span>
+      <h2 class="section-title">System Screenshots</h2>
+      <p class="section-subtitle">
+        Take a look at the intuitive and modern interface
+      </p>
+    </div>
+    <div class="screenshots-grid">
+      @for (screenshot of screenshots; track screenshot.title) {
+      <mat-card class="screenshot-card">
+        <div class="screenshot-image-wrapper">
+          <img [src]="screenshot.src" [alt]="screenshot.title" class="screenshot-image">
+          <div class="screenshot-overlay">
+            <mat-icon>zoom_in</mat-icon>
+          </div>
+        </div>
+        <div class="screenshot-info">
+          <h4>{{ screenshot.title }}</h4>
+          <p>{{ screenshot.description }}</p>
+        </div>
+      </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- Demo Accounts Section -->
+  <section id="demo" class="demo-section">
+    <div class="section-header">
+      <span class="section-tag">Try It Now</span>
+      <h2 class="section-title">Demo Accounts</h2>
+      <p class="section-subtitle">
+        Use these credentials to explore different user roles and permissions
+      </p>
+    </div>
+    <div class="demo-cards">
+      @for (account of demoAccounts; track account.role) {
+      <mat-card class="demo-card" [style.--role-color]="account.color">
+        <div class="demo-card-header" [style.background]="account.color">
+          <mat-icon>badge</mat-icon>
+          <span class="role-badge">{{ account.role }}</span>
+        </div>
+        <div class="demo-card-body">
+          <div class="credential-row">
+            <mat-icon>email</mat-icon>
+            <div class="credential-info">
+              <label>Email</label>
+              <span class="credential-value">{{ account.email }}</span>
+            </div>
+          </div>
+          <div class="credential-row">
+            <mat-icon>lock</mat-icon>
+            <div class="credential-info">
+              <label>Password</label>
+              <span class="credential-value">{{ account.password }}</span>
+            </div>
+          </div>
+          <div class="permissions-list">
+            <label>Permissions:</label>
+            <div class="permission-tags">
+              @for (permission of account.permissions; track permission) {
+              <span class="permission-tag">{{ permission }}</span>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="demo-card-footer">
+          <a mat-flat-button class="btn-login-role" [routerLink]="['/login']" [style.--btn-bg]="account.color">
+            <mat-icon>login</mat-icon>
+            Login as {{ account.role }}
+          </a>
+        </div>
+      </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Ready to Get Started?</h2>
+      <p>Experience the full power of our ERP system with the demo accounts above</p>
+      <a mat-flat-button class="btn-primary btn-large" routerLink="/login">
+        <mat-icon>login</mat-icon>
+        Access the System
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <mat-icon>business</mat-icon>
+        <span>ERP System</span>
+      </div>
+      <p class="footer-text">
+        A full-stack ERP web application built with Angular and ASP.NET Core
+      </p>
+      <div class="footer-links">
+        <a routerLink="/login">Login</a>
+        <a routerLink="/register">Register</a>
+      </div>
+      <p class="footer-copyright">
+        © 2026 ERP System. Built for educational purposes.
+      </p>
+    </div>
+  </footer>
+</div>

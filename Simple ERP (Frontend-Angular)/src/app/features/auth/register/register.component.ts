@@ -37,18 +37,21 @@ export class RegisterComponent {
     private snackBar = inject(MatSnackBar);
 
     isLoading = false;
+    hidePassword = true;
 
     registerForm = this.fb.group({
         fullName: ['', [Validators.required]],
         username: ['', [Validators.required, Validators.minLength(3)]],
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
+        agreeTerms: [false, [Validators.requiredTrue]],
     });
 
     get fullName() { return this.registerForm.get('fullName'); }
     get username() { return this.registerForm.get('username'); }
     get email() { return this.registerForm.get('email'); }
     get password() { return this.registerForm.get('password'); }
+    get agreeTerms() { return this.registerForm.get('agreeTerms'); }
 
     onSubmit(): void {
         if (this.registerForm.invalid) {
