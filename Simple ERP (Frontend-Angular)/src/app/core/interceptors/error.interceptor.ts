@@ -13,11 +13,24 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error) => {
       if (error.status === HttpStatusCode.Unauthorized) {
-        auth.logout();
-        snackBar.open('Session expired. Please log in again.', 'Close', {
-          duration: 5000,
-          panelClass: 'error-snackbar',
-        });
+        // Only logout if the token is actually expired or missing (genuine session expiry).
+        // If the user has a valid token but hits a role-restricted endpoint, backend returns
+        // 401 only when there is no token at all or it is expired — in that case logout.
+        // Do NOT logout when the token is still valid (that would be a backend 403 case).
+        if (!auth.isLoggedIn()) {
+          auth.logout();
+          snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+            panelClass: 'error-snackbar',
+          });
+        } else {
+          // Token is valid but server rejected — treat as access denied
+          router.navigate(['/dashboard']);
+          snackBar.open('Access denied. Insufficient permissions.', 'Close', {
+            duration: 5000,
+            panelClass: 'error-snackbar',
+          });
+        }
       } else if (error.status === HttpStatusCode.Forbidden) {
         router.navigate(['/dashboard']);
         snackBar.open('Access denied. Insufficient permissions.', 'Close', {

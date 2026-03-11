@@ -13,36 +13,41 @@
     </mat-toolbar>
 
     <mat-nav-list class="nav-links">
+      <!-- Dashboard: visible to ALL roles -->
       <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" class="clr-dashboard"
         [routerLinkActiveOptions]="{ exact: true }" (click)="closeDrawerIfHandset()">
         <mat-icon matListItemIcon>dashboard</mat-icon>
         <span matListItemTitle>Dashboard</span>
       </a>
 
+      <!-- Orders: Admin & Manager only -->
+      @if (isAdmin || isManager) {
       <a mat-list-item routerLink="/orders" routerLinkActive="active-link" class="clr-orders"
         (click)="closeDrawerIfHandset()">
         <mat-icon matListItemIcon>shopping_cart</mat-icon>
         <span matListItemTitle>Orders</span>
       </a>
+      }
 
+      <!-- Customers (CRM): Admin & Manager only -->
+      @if (isAdmin || isManager) {
       <a mat-list-item routerLink="/customers" routerLinkActive="active-link" class="clr-crm"
         (click)="closeDrawerIfHandset()">
         <mat-icon matListItemIcon>groups</mat-icon>
         <span matListItemTitle>Customers (CRM)</span>
       </a>
+      }
 
+      <!-- Suppliers (SRM): Admin & Manager only -->
+      @if (isAdmin || isManager) {
       <a mat-list-item routerLink="/suppliers" routerLinkActive="active-link" class="clr-srm"
         (click)="closeDrawerIfHandset()">
         <mat-icon matListItemIcon>local_shipping</mat-icon>
         <span matListItemTitle>Suppliers (SRM)</span>
       </a>
+      }
 
-      <a mat-list-item routerLink="/pos" routerLinkActive="active-link" class="clr-pos"
-        (click)="closeDrawerIfHandset()">
-        <mat-icon matListItemIcon>point_of_sale</mat-icon>
-        <span matListItemTitle>POS</span>
-      </a>
-
+      <!-- Inventory / Products: Admin & Manager only -->
       @if (isAdmin || isManager) {
       <a mat-list-item routerLink="/products" routerLinkActive="active-link" class="clr-inventory"
         (click)="closeDrawerIfHandset()">
@@ -51,6 +56,14 @@
       </a>
       }
 
+      <!-- POS: ALL roles (Admin, Manager, Employee) -->
+      <a mat-list-item routerLink="/pos" routerLinkActive="active-link" class="clr-pos"
+        (click)="closeDrawerIfHandset()">
+        <mat-icon matListItemIcon>point_of_sale</mat-icon>
+        <span matListItemTitle>POS</span>
+      </a>
+
+      <!-- Admin-only items -->
       @if (isAdmin) {
       <a mat-list-item routerLink="/logs" routerLinkActive="active-link" class="clr-logs"
         (click)="closeDrawerIfHandset()">
