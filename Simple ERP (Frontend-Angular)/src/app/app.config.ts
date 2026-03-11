@@ -22,6 +22,6 @@ export const appConfig: ApplicationConfig = {
     ),
     importProvidersFrom(NgChartsModule.forRoot()),
     ErpApiClient,
-    { provide: API_BASE_URL, useValue: environment.apiBaseUrl },
+    { provide: API_BASE_URL, useValue: environment.apiUrl },
   ],
 };

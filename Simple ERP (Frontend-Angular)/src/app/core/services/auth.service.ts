@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { ErpApiClient, UserLoginDto, UserRegisterDto } from '../api/erp.api';
+import { environment } from '../../../environments/environment';
 
 export type UserRole = 'Admin' | 'Manager' | 'Employee';
 
@@ -23,12 +25,13 @@ const TOKEN_KEY = 'erp_token';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private http = inject(HttpClient);
   private api = inject(ErpApiClient);
   private router = inject(Router);
 
   login(email: string, password: string): Observable<void> {
     const body: UserLoginDto = { email, password };
-    return this.api.login(body).pipe(
+    return this.http.post<any>(`${environment.apiUrl}/api/Auth/login`, body).pipe(
       tap((response) => {
         if (response?.token) {
           localStorage.setItem(TOKEN_KEY, response.token);
@@ -39,7 +42,7 @@ export class AuthService {
   }
 
   register(body: UserRegisterDto): Observable<void> {
-    return this.api.register(body).pipe(
+    return this.http.post<any>(`${environment.apiUrl}/api/Auth/register`, body).pipe(
       tap((response) => {
         if (response?.token) {
           localStorage.setItem(TOKEN_KEY, response.token);

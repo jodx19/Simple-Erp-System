@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: "https://simpleerpsystem.runasp.net/api",
+  apiUrl: "https://simpleerpsystem.runasp.net",
 };
