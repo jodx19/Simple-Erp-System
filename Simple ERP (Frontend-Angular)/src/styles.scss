@@ -414,9 +414,1430 @@ body {
   }
 }
 
-/* ── Responsive ────────────────────────────────────────────── */
-@media (max-width: 640px) {
+/* =========================================================================
+   MOBILE-FIRST RESPONSIVE DESIGN SYSTEM
+   ========================================================================= */
+
+/* ── Mobile-First Base Styles (Default: Mobile) ───────────────────────── */
+
+/* Base layout adjustments for mobile */
+.page-title {
+  font-size: 1.375rem;
+  margin: 0 0 1rem;
+}
+
+/* Typography adjustments for mobile */
+body {
+  font-size: 0.875rem;
+}
+
+/* Card adjustments for mobile */
+.mat-mdc-card {
+  padding: 1rem;
+}
+
+/* Table adjustments for mobile */
+.mat-mdc-table {
+  .mat-mdc-header-cell,
+  .mat-mdc-cell {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Form adjustments for mobile */
+.mat-mdc-form-field {
+  font-size: 0.875rem;
+}
+
+/* Button adjustments for mobile */
+.btn-primary {
+  height: 44px !important;
+  padding: 0 1rem !important;
+  font-size: 0.875rem;
+}
+
+/* Grid adjustments for mobile */
+.strict-grid {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* Container adjustments for mobile */
+.main-content {
+  padding: 1rem;
+  gap: 1rem;
+}
+
+/* Chart container mobile adjustments */
+.chart-container {
+  min-height: 250px !important;
+}
+
+/* KPI grid mobile adjustments */
+.kpi-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+/* KPI card mobile adjustments */
+.kpi-card {
+  padding: 1rem;
+
+  .icon-box {
+    width: 40px;
+    height: 40px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .kpi-data {
+    .label {
+      font-size: 0.7rem;
+    }
+
+    .value {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Header section mobile adjustments */
+.header-section {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+
+  .title-group {
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Products header mobile adjustments */
+.products-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+/* Filters bar mobile adjustments */
+.filters-bar {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+
+  .search-box {
+    min-width: auto;
+    max-width: none;
+    width: 100%;
+  }
+
+  .selectors-group {
+    width: 100%;
+    justify-content: space-between;
+
+    .filter-field {
+      flex: 1;
+
+      select {
+        width: 100%;
+      }
+    }
+  }
+}
+
+/* Charts grid mobile adjustments */
+.charts-grid {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  .chart-card {
+    padding: 1rem;
+
+    .chart-header {
+      margin-bottom: 1rem;
+
+      h3 {
+        font-size: 1rem;
+      }
+    }
+
+    .chart-container {
+      height: 200px;
+      min-height: 200px;
+    }
+  }
+}
+
+/* Transactions section mobile adjustments */
+.transactions-section {
+  padding: 1rem;
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    h3 {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Table scroll container for mobile */
+.table-scroll-container,
+.mat-mdc-card-content {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Dialog mobile adjustments */
+.mat-mdc-dialog-content {
+  max-height: 60vh !important;
+  padding: 1rem !important;
+}
+
+/* Snackbar mobile adjustments */
+.mat-mdc-snack-bar-container {
+  max-width: calc(100vw - 2rem) !important;
+  margin: 1rem !important;
+}
+
+/* Toolbar mobile adjustments */
+.main-toolbar {
+  padding: 0 1rem;
+  height: 56px;
+
+  .company-name {
+    font-size: 1rem;
+  }
+}
+
+/* User meta mobile adjustments */
+.toolbar-actions {
+  .user-meta {
+    display: none; /* Hide on mobile */
+  }
+}
+
+/* Profile button mobile adjustments */
+.profile-button {
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Sidenav mobile adjustments */
+.sidenav {
+  width: 280px;
+
+  .sidenav-toolbar {
+    height: 56px;
+    min-height: 56px;
+  }
+}
+
+/* Nav links mobile adjustments */
+.nav-links {
+  .mat-mdc-list-item {
+    height: 44px !important;
+    margin: 0 8px;
+
+    .mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+  }
+}
+
+/* Landing page mobile adjustments */
+.landing-nav {
+  padding: 0.75rem 1rem;
+
+  .nav-brand {
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 24px;
+    }
+
+    .brand-text {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+/* Hero section mobile adjustments */
+.hero-section {
+  padding: 5rem 1rem 2rem;
+
+  .hero-content {
+    .hero-badge {
+      padding: 0.375rem 0.75rem;
+      margin-bottom: 1rem;
+
+      span {
+        font-size: 0.75rem;
+      }
+    }
+
+    .hero-title {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+
+      .btn-large {
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    .hero-stats {
+      flex-direction: column;
+      gap: 1rem;
+
+      .stat-divider {
+        display: none;
+      }
+
+      .stat-item {
+        .stat-number {
+          font-size: 1.75rem;
+        }
+
+        .stat-label {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+/* Section mobile adjustments */
+section {
+  padding: 2.5rem 1rem;
+
+  .section-header {
+    margin-bottom: 2rem;
+
+    .section-tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+/* Features grid mobile adjustments */
+.features-grid {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  .feature-card {
+    padding: 1.25rem;
+
+    .feature-icon-wrapper {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 1rem;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .feature-title {
+      font-size: 1rem;
+    }
+
+    .feature-description {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Tech categories mobile adjustments */
+.tech-categories {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  .tech-category {
+    padding: 1.25rem;
+
+    .category-title {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Screenshots grid mobile adjustments */
+.screenshots-grid {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* Demo cards mobile adjustments */
+.demo-cards {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  .demo-card {
+    .demo-card-header {
+      padding: 1rem;
+
+      .role-badge {
+        font-size: 1rem;
+      }
+    }
+
+    .demo-card-body {
+      padding: 1rem;
+    }
+
+    .demo-card-footer {
+      padding: 0.75rem 1rem 1rem;
+    }
+  }
+}
+
+/* CTA section mobile adjustments */
+.cta-section {
+  padding: 2.5rem 1rem;
+
+  .cta-content {
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+
+    .btn-large {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+/* Footer mobile adjustments */
+.landing-footer {
+  padding: 2rem 1rem;
+
+  .footer-brand {
+    mat-icon {
+      font-size: 24px;
+    }
+
+    span {
+      font-size: 1rem;
+    }
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+/* Auth container mobile adjustments */
+.auth-container {
+  padding: 0;
+}
+
+/* Auth wrapper mobile adjustments */
+.auth-wrapper {
+  grid-template-columns: 1fr;
+  min-height: auto;
+}
+
+/* Auth branding mobile adjustments (hidden on mobile) */
+.auth-branding {
+  display: none;
+}
+
+/* Auth form container mobile adjustments */
+.auth-form-container {
+  padding: 1.5rem;
+  min-height: 100vh;
+}
+
+/* Login card mobile adjustments */
+.login-card {
+  padding: 1.5rem;
+  max-width: 100%;
+
+  mat-card-header {
+    margin-bottom: 1.5rem;
+
+    .header-icon {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 1rem;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    mat-card-title {
+      font-size: 1.375rem;
+    }
+
+    mat-card-subtitle {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Form options mobile adjustments */
+.form-options {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+}
+
+/* Action button mobile adjustments */
+.action-btn {
+  height: 48px !important;
+  font-size: 0.9rem;
+}
+
+/* Demo section mobile adjustments */
+.demo-section {
+  margin-top: 1rem;
+
+  .demo-buttons {
+    .demo-btn {
+      padding: 0.75rem;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .demo-info {
+        .demo-role {
+          font-size: 0.85rem;
+        }
+
+        .demo-email {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+/* Auth links mobile adjustments */
+.auth-links {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+
+/* Back to landing mobile adjustments */
+.back-to-landing {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+}
+
+/* Paginator mobile adjustments */
+.mat-mdc-paginator {
+  .mat-mdc-paginator-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .mat-mdc-paginator-page-size {
+    margin-right: 0;
+  }
+}
+
+/* Menu mobile adjustments */
+.mat-mdc-menu-panel {
+  max-width: calc(100vw - 2rem) !important;
+}
+
+/* Badge mobile adjustments */
+.badge {
+  padding: 2px 8px;
+  font-size: 0.65rem;
+}
+
+/* Status pills mobile adjustments */
+.pill-success,
+.pill-pending,
+.pill-cancelled,
+.pill-info {
+  padding: 4px 10px;
+  font-size: 0.65rem;
+}
+
+/* No data content mobile adjustments */
+.no-data-content {
+  padding: 2rem 0;
+
+  mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Loading state mobile adjustments */
+.loading-state {
+  height: 250px;
+}
+
+/* Error card mobile adjustments */
+.error-card {
+  padding: 1.5rem;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Glass card mobile adjustments */
+.glass-card {
+  border-radius: 12px;
+}
+
+/* Scrollbar mobile adjustments */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* =========================================================================
+   TABLET BREAKPOINT (min-width: 640px)
+   ========================================================================= */
+@media (min-width: 640px) {
   .page-title {
-    font-size: 1.5rem;
+    font-size: 1.625rem;
+  }
+
+  .mat-mdc-card {
+    padding: 1.25rem;
+  }
+
+  .main-content {
+    padding: 1.5rem;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .kpi-card {
+    padding: 1.25rem;
+
+    .icon-box {
+      width: 48px;
+      height: 48px;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .kpi-data {
+      .value {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .hero-section {
+    padding: 6rem 1.5rem 3rem;
+
+    .hero-content {
+      .hero-title {
+        font-size: 2.25rem;
+      }
+
+      .hero-actions {
+        flex-direction: row;
+        justify-content: center;
+
+        .btn-large {
+          width: auto;
+        }
+      }
+    }
+  }
+
+  section {
+    padding: 3rem 1.5rem;
+
+    .section-header {
+      .section-title {
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .screenshots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .demo-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cta-section {
+    padding: 3rem 1.5rem;
+
+    .cta-content {
+      h2 {
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  .login-card {
+    padding: 2rem;
+  }
+
+  .auth-form-container {
+    padding: 2rem;
+  }
+}
+
+/* =========================================================================
+   LAPTOP BREAKPOINT (min-width: 1024px)
+   ========================================================================= */
+@media (min-width: 1024px) {
+  .page-title {
+    font-size: 1.875rem;
+  }
+
+  body {
+    font-size: 1rem;
+  }
+
+  .mat-mdc-card {
+    padding: 1.5rem;
+  }
+
+  .mat-mdc-table {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  .main-content {
+    padding: 1.5rem;
+  }
+
+  .chart-container {
+    min-height: 320px !important;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .kpi-card {
+    padding: 1.5rem;
+
+    .icon-box {
+      width: 56px;
+      height: 56px;
+
+      mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    .kpi-data {
+      .value {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .header-section {
+    flex-direction: row;
+    align-items: center;
+
+    .title-group {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .products-header {
+    flex-direction: row;
+    align-items: flex-start;
+
+    .header-actions {
+      width: auto;
+      flex-direction: row;
+
+      button {
+        width: auto;
+      }
+    }
+  }
+
+  .filters-bar {
+    flex-direction: row;
+    align-items: center;
+
+    .search-box {
+      min-width: 250px;
+      max-width: 400px;
+      width: auto;
+    }
+
+    .selectors-group {
+      width: auto;
+
+      .filter-field {
+        select {
+          width: auto;
+        }
+      }
+    }
+  }
+
+  .charts-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+
+    .chart-card {
+      padding: 1.5rem;
+
+      .chart-container {
+        height: 280px;
+        min-height: 280px;
+      }
+    }
+
+    .bar-chart-area {
+      grid-column: span 8;
+    }
+
+    .doughnut-chart-area {
+      grid-column: span 4;
+    }
+
+    .line-chart-area {
+      grid-column: span 12;
+    }
+  }
+
+  .transactions-section {
+    padding: 1.5rem;
+
+    .section-header {
+      flex-direction: row;
+      align-items: center;
+
+      h3 {
+        font-size: 1.125rem;
+      }
+    }
+  }
+
+  .toolbar-actions {
+    .user-meta {
+      display: flex;
+    }
+  }
+
+  .hero-section {
+    padding: 8rem 2rem 4rem;
+
+    .hero-content {
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.125rem;
+      }
+
+      .hero-stats {
+        flex-direction: row;
+        gap: 2rem;
+
+        .stat-divider {
+          display: block;
+        }
+
+        .stat-item {
+          .stat-number {
+            font-size: 2.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  section {
+    padding: 4rem 2rem;
+
+    .section-header {
+      margin-bottom: 3rem;
+
+      .section-title {
+        font-size: 2.25rem;
+      }
+
+      .section-subtitle {
+        font-size: 1.125rem;
+      }
+    }
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+
+    .feature-card {
+      padding: 1.5rem;
+
+      .feature-icon-wrapper {
+        width: 60px;
+        height: 60px;
+
+        mat-icon {
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+        }
+      }
+    }
+  }
+
+  .tech-categories {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .screenshots-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .demo-cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .cta-section {
+    padding: 4rem 2rem;
+
+    .cta-content {
+      h2 {
+        font-size: 2.25rem;
+      }
+
+      p {
+        font-size: 1.125rem;
+      }
+    }
+  }
+
+  .landing-footer {
+    padding: 3rem 2rem;
+  }
+
+  .auth-wrapper {
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+
+  .auth-branding {
+    display: flex;
+    padding: 2rem;
+  }
+
+  .auth-form-container {
+    padding: 2rem;
+    min-height: auto;
+  }
+
+  .login-card {
+    padding: 2.5rem;
+    max-width: 440px;
+
+    mat-card-header {
+      .header-icon {
+        width: 70px;
+        height: 70px;
+
+        mat-icon {
+          font-size: 36px;
+          width: 36px;
+          height: 36px;
+        }
+      }
+
+      mat-card-title {
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  .form-options {
+    flex-direction: row;
+    align-items: center;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .action-btn {
+    height: 52px !important;
+    font-size: 1rem;
+  }
+
+  .demo-section {
+    margin-top: 1.5rem;
+  }
+
+  .mat-mdc-paginator {
+    .mat-mdc-paginator-container {
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+    }
+  }
+
+  .main-toolbar {
+    padding: 0 1.5rem;
+    height: 64px;
+
+    .company-name {
+      font-size: 1.25rem;
+    }
+  }
+
+  .sidenav {
+    width: 260px;
+
+    .sidenav-toolbar {
+      height: 64px;
+      min-height: 64px;
+    }
+  }
+
+  .nav-links {
+    .mat-mdc-list-item {
+      height: 48px !important;
+      margin: 0 12px;
+
+      .mat-icon {
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+        margin-right: 12px;
+      }
+    }
+  }
+
+  .landing-nav {
+    padding: 1rem 2rem;
+
+    .nav-brand {
+      .brand-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 28px;
+      }
+
+      .brand-text {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+/* =========================================================================
+   DESKTOP BREAKPOINT (min-width: 1280px)
+   ========================================================================= */
+@media (min-width: 1280px) {
+  .page-title {
+    font-size: 1.875rem;
+  }
+
+  .main-content {
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .chart-container {
+    min-height: 450px !important;
+  }
+
+  .kpi-grid {
+    gap: 24px;
+  }
+
+  .kpi-card {
+    .kpi-data {
+      .value {
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  .charts-grid {
+    gap: 24px;
+
+    .chart-card {
+      padding: 2rem;
+
+      .chart-container {
+        height: 320px;
+        min-height: 320px;
+      }
+    }
+  }
+
+  .transactions-section {
+    padding: 2rem;
+  }
+
+  .hero-section {
+    .hero-content {
+      .hero-title {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+      }
+    }
+  }
+
+  section {
+    padding: 6rem 2rem;
+
+    .section-header {
+      margin-bottom: 4rem;
+
+      .section-title {
+        font-size: clamp(2rem, 4vw, 2.75rem);
+      }
+    }
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    max-width: 1200px;
+
+    .feature-card {
+      padding: 2rem;
+
+      .feature-icon-wrapper {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 1.5rem;
+
+        mat-icon {
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+
+      .feature-title {
+        font-size: 1.25rem;
+      }
+
+      .feature-description {
+        font-size: 0.95rem;
+      }
+    }
+  }
+
+  .tech-categories {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    max-width: 900px;
+
+    .tech-category {
+      padding: 2rem;
+
+      .category-title {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .screenshots-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    max-width: 1200px;
+  }
+
+  .demo-cards {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    max-width: 1100px;
+
+    .demo-card {
+      .demo-card-header {
+        padding: 1.5rem;
+
+        .role-badge {
+          font-size: 1.25rem;
+        }
+      }
+
+      .demo-card-body {
+        padding: 1.5rem;
+      }
+
+      .demo-card-footer {
+        padding: 1rem 1.5rem 1.5rem;
+      }
+    }
+  }
+
+  .cta-section {
+    padding: 5rem 2rem;
+
+    .cta-content {
+      h2 {
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  .landing-footer {
+    padding: 3rem 2rem;
+  }
+
+  .auth-branding {
+    padding: 3rem;
+  }
+
+  .auth-form-container {
+    padding: 3rem;
+  }
+
+  .landing-nav {
+    padding: 1rem 3rem;
+  }
+}
+
+/* =========================================================================
+   LARGE DESKTOP BREAKPOINT (min-width: 1536px)
+   ========================================================================= */
+@media (min-width: 1536px) {
+  .main-content {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
+
+/* =========================================================================
+   UTILITY CLASSES FOR RESPONSIVE DESIGN
+   ========================================================================= */
+
+/* Hide on mobile */
+.hide-mobile {
+  display: none !important;
+}
+
+/* Show on tablet and up */
+@media (min-width: 640px) {
+  .hide-mobile {
+    display: initial !important;
+  }
+
+  .hide-tablet-up {
+    display: none !important;
+  }
+}
+
+/* Show on laptop and up */
+@media (min-width: 1024px) {
+  .hide-laptop-up {
+    display: none !important;
+  }
+}
+
+/* Hide on tablet */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+/* Hide on laptop */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .hide-laptop {
+    display: none !important;
+  }
+}
+
+/* Hide on desktop */
+@media (min-width: 1280px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .kpi-card:hover {
+    transform: none;
+  }
+
+  .mat-mdc-row:hover {
+    transform: none;
+  }
+
+  .feature-card:hover {
+    transform: none;
+  }
+
+  .screenshot-card:hover {
+    transform: none;
+  }
+
+  .demo-card:hover {
+    transform: none;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support (already dark theme, but for system preference) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .mat-mdc-card {
+    border-width: 2px;
+  }
+
+  .badge,
+  .pill-success,
+  .pill-pending,
+  .pill-cancelled,
+  .pill-info {
+    border-width: 2px;
+  }
+}
+
+/* Print styles */
+@media print {
+  @page {
+    size: 1440px 900px;
+    margin: 0;
+  }
+
+  body {
+    width: 1440px !important;
+    height: 900px !important;
+    overflow: hidden !important;
+    zoom: 1 !important;
+    background-color: var(--bg-dark-slate) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .sidenav {
+    display: none !important;
+  }
+
+  .main-content {
+    width: 100% !important;
+    padding: 24px !important;
+    gap: 24px !important;
+  }
+
+  .kpi-grid,
+  .header-grid,
+  .stats-header-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px !important;
   }
 }
